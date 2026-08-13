@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Acme&family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap');
+@import "tailwindcss";
+
+/* https://tailwindcss.com/docs/dark-mode for Legacy, LegacyDark and Classic */
+
+@theme {
+    --color-legacy-blue-100: #e8f4ff;
+    --color-legacy-blue-150: #d8eaff;
+    --color-legacy-blue-200: #c7e0ff;
+    --color-legacy-blue-250: #a1c7e9;
+    --color-legacy-blue-300: #7bafd4;
+    --color-legacy-blue-350: #5c8fbf;
+    --color-legacy-blue-400: #3c6fa7;
+
+    --color-legacy-red-100: #ffe6e6;
+    --color-legacy-red-200: #ffb3b3;
+    --color-legacy-red-400: #b00020;
+
+
+    --color-bex-grey-100: #e6e6e6;
+    --color-bex-grey-100: #ffffff4d;
+    --color-bex-grey-100: #000000d9;
+
+    --color-archi-prog: #AF99EF;
+    --color-archi-useful: #6D8BE8;
+    --color-archi-trash: #00EEEE;
+    --color-archi-trap: #FA8072;
+
+    --font-google-sans: "Google Sans Flex", sans-serif;
+    --font-acme: "Acme", sans-serif;
+    --font-cn: "Comic Neue", sans-serif;
+    --default-font-family: var(--font-google-sans);
+}
