@@ -1,7 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=Acme&family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Google+Sans+Flex:opsz,wght@6..144,1..1000&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Google+Sans+Flex:opsz,wght,GRAD,ROND@6..144,1..1000,0..100,55&family=Habibi&family=Montaga&family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+@font-face {
+  font-family: 'Norse';
+  src: url(../assets/Norse-KaWl.otf)
+}
+@font-face {
+  font-family: 'NorseBold';
+  src: url(../assets/NorseBold-2Kge.otf)
+}
+
 @import "tailwindcss";
 
 /* https://tailwindcss.com/docs/dark-mode for Legacy, LegacyDark and Classic */
+
+@custom-variant legacy (&:where(.legacy, .legacy *));
+@custom-variant nordic (&:where(.nordic, .nordic *));
+@custom-variant viking (&:where(.viking, .viking *));
+
 
 @theme {
     --color-legacy-blue-100: #e8f4ff;
@@ -16,10 +31,53 @@
     --color-legacy-red-200: #ffb3b3;
     --color-legacy-red-400: #b00020;
 
+    --color-legacy-grey-100: #e6e6e6;
+    --color-legacy-grey-200: #ffffff4d;
+    --color-legacy-grey-300: #000000d9;
 
-    --color-bex-grey-100: #e6e6e6;
-    --color-bex-grey-100: #ffffff4d;
-    --color-bex-grey-100: #000000d9;
+    --color-nordic-red-400: #4E1D12;
+    --color-nordic-red-500: #35110B;
+    --color-nordic-red-600: #2C0D09;
+    --color-nordic-red-700: #1E0805;
+
+    --color-nordic-parchment-100: #C7B398;
+    --color-nordic-parchment-200: #B8A083;
+    --color-nordic-parchment-300: #9F8566;
+    --color-nordic-parchment-400: #957A59;
+
+    --color-nordic-parchment2-100: #E3D9C7;
+    --color-nordic-parchment2-200: #D6C9B6;
+    --color-nordic-parchment2-300: #C7B49A;
+    --color-nordic-parchment2-400: #A08667;
+
+    --color-nordic-grey-700: #24201B;
+    --color-nordic-grey-800: #0D0D0B;
+
+    --color-nordic-blue-500: #2B444D;
+    --color-nordic-blue-600: #1A313A;
+    --color-nordic-blue-700: #132128;
+
+    --color-nordic-brown-500: #473826;
+    --color-nordic-brown-700: #241D15;
+    --color-nordic-brown-800: #121312;
+
+    --color-viking-beige-100: #EADBC5;
+    --color-viking-beige-200: #E7D6BB;
+    --color-viking-beige-300: #DEC59F;
+    --color-viking-beige-400: #B89B78;
+    --color-viking-beige-500: #B48E5F;
+    --color-viking-beige-1000: #DABD93;
+
+    --color-viking-orange-o: #c45b1a;
+    --color-viking-orange-200: #B64F15;
+    --color-viking-orange-300: #9C4814;
+    --color-viking-red-100: #991212;
+    --color-viking-red-200: #7A1616;
+    --color-viking-red-300: #591B1B;
+    --color-viking-red-400: #471515;
+    --color-viking-green-100: #6F6348;
+    --color-viking-green-600: #27342A;
+    --color-viking-green-700: #253027;
 
     --color-archi-prog: #AF99EF;
     --color-archi-useful: #6D8BE8;
@@ -27,7 +85,11 @@
     --color-archi-trap: #FA8072;
 
     --font-google-sans: "Google Sans Flex", sans-serif;
-    --font-acme: "Acme", sans-serif;
-    --font-cn: "Comic Neue", sans-serif;
+    --font-crimson: "Crimson Text", serif, 500;
+    --font-habibi: "Habibi", serif;
+    --font-montaga: "Montaga", serif;
+    --font-pt: "PT Serif", serif;
+    --font-norse: Norse, "sans-serif";
+    --font-norse-bold: NorseBold, "sans-serif";
     --default-font-family: var(--font-google-sans);
 }
