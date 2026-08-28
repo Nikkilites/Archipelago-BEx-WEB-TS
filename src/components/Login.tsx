@@ -2,13 +2,14 @@ import { useState, type SubmitEvent } from "react"
 
 import { Button } from '../components/Buttons'
 import { InputField } from '../components/InputField'
+import { useLocalStorage } from "../hooks/useLocalStorage"
 
 export function LoginForm() {
     const [error, setError] = useState("")
 
-    const [server, setServer] = useState("")
-    const [name, setName] = useState("")
-    const [pass, setPass] = useState("")
+    const [server, setServer] = useLocalStorage<string>("server", "")
+    const [name, setName] = useLocalStorage<string>("name", "")
+    const [pass, setPass] = useLocalStorage<string>("pass", "")
 
     function submitLogin(e: SubmitEvent) {
         e.preventDefault()

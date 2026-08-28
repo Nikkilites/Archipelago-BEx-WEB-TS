@@ -11,13 +11,14 @@ import { TrashExchange } from '../components/TrashExchange'
 import { Island } from '../components/Island'
 
 import { useState } from 'react'
+import { useLocalStorage } from '../hooks/useLocalStorage'
 
 
 export default function App() {
   const { isActive } = useSession()
 
   const [activePage, setActivePage] = useState("Home")
-  const [theme, setTheme] = useState("viking")
+  const [theme, setTheme] = useLocalStorage<string>("theme", "viking")
 
   function onThemeChange(theme: string) {
     setTheme(theme)
