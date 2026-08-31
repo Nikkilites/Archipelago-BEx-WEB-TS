@@ -4,29 +4,31 @@ export class Region {
     name: string;
     islandName: string;
     runeName: string;
-    runeCount: number;
     treasureName: string;
     locations: Location[];
 
-  public constructor(name: string, treasureName: string, runeCount: number, locations: Location[])
+  public constructor(name: string, treasureName: string, locations: Location[])
   {
     this.name = name;
     this.islandName = name + " Island";
     this.runeName = name + " Rune";
-    this.runeCount = runeCount;
     this.treasureName = treasureName;
     this.locations = locations;
   }
 
-  public getIsOpen(runesReq: number) {
-    return (this.runeCount >= runesReq || this.name === "Starting")
+  public getRuneCount(runesReceived: string[]) {
+    return runesReceived.filter(rune => rune == this.runeName).length
   }
 
-  public getIsFinished() {
-    return this.locations.filter(loc => !loc.isChecked).length === 0
+  public getIsOpen(runesReceived: string[], runesReq: number) {
+    return (this.getRuneCount(runesReceived) >= runesReq || this.name === "Starting")
   }
 
-  public getTreasureFound() {
-    return this.locations.filter(loc => !loc.isChecked && loc.name.charAt(0) === 'S').length === 0
+  public getIsFinished(checkedLocationIds: number[]) {
+    return this.locations.filter(loc => !loc.getIsChecked(checkedLocationIds)).length === 0
+  }
+
+  public getTreasureFound(checkedLocationIds: number[]) {
+    return this.locations.filter(loc => !loc.getIsChecked(checkedLocationIds) && loc.name.charAt(0) === 'S').length === 0
   }
 }

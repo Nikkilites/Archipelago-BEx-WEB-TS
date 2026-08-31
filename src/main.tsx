@@ -7,7 +7,7 @@ import { SessionProvider } from './context/SessionProvider.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <SessionProvider something=''>
+    <SessionProvider>
       <App />
     </SessionProvider>
   </StrictMode>,

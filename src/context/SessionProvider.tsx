@@ -1,65 +1,151 @@
-import { type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
+import type { Item, JSONRecord } from "archipelago.js";
 
 import { SessionContext } from "./SessionContext";
+import { ArchipelagoService } from "../archipelago/ArchipelagoService";
 
 import { Region } from "../bex/model/Region";
 import { Location } from "../bex/model/Location";
 import { PlayerOptions } from "../bex/model/PlayerOptions";
+import { RegionData } from "../bex/data/RegionData";
 
 type SessionProviderProps = {
     children: ReactNode
-    something: string
 }
 
 export function SessionProvider({ children }: SessionProviderProps) {
+    const [isActive, setActive] = useState<boolean>(false)
+    const [playerName, setPlayerName] = useState<string>("name")
+    const [playerOptions, setPlayerOptions] = useState<PlayerOptions>(new PlayerOptions(0,0,0))
+    const [runesAquired, setRunesAquired] = useState<string[]>([])
+    const [trashAquired, setTrashAquired] = useState<number>(0)
+    const [regions, setRegions] = useState<Region[]>([])
+    const [checkedLocIds, setCheckedLocIds] = useState<number[]>([])
+    const [textClient, setTextClient] = useState<string[]>([])
     
+    const apService = new ArchipelagoService()
+    let receivedItems: Item[] = []
+
     //Create all controller functions here
+    function connectAndProcess(server: string, name: string, pass: string) {
+        console.log("Try connect with Server: " + server + " | Name: " + name + " | Password: " + pass)
+
+        apService.connect(onDisconnected, onReceiveItems, onReceiveMessage, server, name, pass)
+            .then((value) => {
+                console.log("Connected to the Archipelago server!")
+
+                setCheckedLocIds(apService.getCheckedLocationIds())
+
+                setPlayerName(name)
+                SetupSlot(value)
+
+                setActive(true)
+                giveItems(receivedItems)
+
+                return true;
+            })
+            .catch(() => {
+                console.error
+                return false;
+            });
+    }
+
+    function SetupSlot(slotData: JSONRecord) {
+        console.log(slotData)
+
+        let treasuresToGoal = ("treasures_to_goal" in slotData ? slotData["treasures_to_goal"] : slotData["beaten_to_goal"]) as number
+        let hintShopCost = "hint_shop_cost" in slotData ? slotData["hint_shop_cost"] as number : 20
+
+        setPlayerOptions(new PlayerOptions(treasuresToGoal, slotData["runes_required"] as number, hintShopCost))
+        createRegions(slotData["hint_data"] as JSONRecord)
+    }
+
+    function createRegions(objectives: JSONRecord) {
+        //Create Locations
+        let allLocationIds = apService.getAllLocationIds()
+        let allLocations: Location[] = []
+
+        let scoutedItems: Item[] = []
+        apService.scoutLocations(allLocationIds)
+            .then((value) => scoutedItems = value)
+            .catch(console.error)
 
 
-    //Dummy Data:
-    const options = new PlayerOptions(5, 2, 50)
+        for (const id of allLocationIds) {
+            allLocations = allLocations.concat(new Location(
+                apService.getLocationName(id), 
+                id, 
+                objectives[id.toString()] as string,
+                scoutedItems.find(value => value.locationId === id)
+            ))
+        }
 
-    const regions = [
-        new Region("Starting", "Archipelago Map", 0, [
-                new Location("Slay the Bear in Starting Island", 1, "Complete a chapter of The Silent Age", true), 
-                new Location("Slay the Crab in Starting Island", 3, "Complete a chapter of The Silent Age", true)
-            ]
-        ),
-        new Region("Board Game", "Golden Meeple", 2, [
-                new Location("Slay the Bear in Starting Island", 1, "Complete a chapter of The Silent Age", true), 
-                new Location("Slay the Crab in Starting Island", 3, "Complete a chapter of The Silent Age", false)
-            ]
-        ),
-        new Region("Desert", "Desert Talisman", 2, [
-                new Location("Slay the Elemental in Desert Island", 186, "Complete a chapter of The Silent Age", true), 
-                new Location("Slay the Elemental in Desert Island", 182, "Complete a chapter of The Silent Age", true), 
-                new Location("Opened the Sturdy Barrel in Desert Island", 187, "Get a Gold Medal in Cook, Serve, Delicious! 2!!", false)
-            ]
-        ),
-        new Region("Puzzle", "Missing Piece", 2, [
-                new Location("Slay the Elemental in Desert Island", 1386, "Complete a chapter of The Silent Age", true), 
-                new Location("Slay the Elemental in Desert Island", 234, "Complete a chapter of The Silent Age", false), 
-                new Location("Opened the Sturdy Barrel in Desert Island", 64, "Get a Gold Medal in Cook, Serve, Delicious! 2!!", false)
-            ]
-        ),
-        new Region("Orchard", "Orchard Sicle", 1, [
-                new Location("Slay the Wolf in Orchard Island", 10, "Play a session of DREDGE", false), 
-                new Location("Slay the Bear in Orchard Island", 94, "Play a session of DREDGE", false),
-                new Location("Slay the Goblin in Orchard Island", 15, "Play a session of DREDGE", false), 
-                new Location("Slay the Eagle in Orchard Island", 5, "Play a session of DREDGE", false),
-                new Location("Slay the Minotaur in Orchard Island", 80, "Play a session of DREDGE", false), 
-                new Location("Slay the Lizardman in Orchard Island", 56, "Play a session of DREDGE", false),
-                new Location("Slay the Centaur in Orchard Island", 21, "Play a session of DREDGE", false), 
-                new Location("Opened the Sturdy Coffin in Orchard Island", 18, "Get a Gold Medal in Cook, Serve, Delicious! 2!!", false),
-                new Location("Opened the Giant Crate in Orchard Island", 18, "Get a Gold Medal in Cook, Serve, Delicious! 2!!", false),
-                new Location("Opened the Black Barrel in Orchard Island", 94, "Get a Gold Medal in Cook, Serve, Delicious! 2!!", false), 
-                new Location("Opened the Heavy Sarcophagus in Orchard Island", 31, "Get a Gold Medal in Cook, Serve, Delicious! 2!!", false),
-            ]
-        )
-    ]
+        //Create Regions
+        let allRegions: Region[] = []
+
+        for (const [name,treasure] of Object.entries(RegionData)) {
+            const regionLocs = allLocations.filter(loc => loc.regionName == name)
+
+            if (regionLocs.length == 0) continue
+
+            allRegions = allRegions.concat(new Region(name, treasure, regionLocs))
+        }
+
+        setRegions(allRegions)
+    }
+
+    function onReceiveItems(items: Item[]) {
+        console.log("Item received: " + items)
+
+        if (isActive) giveItems(items)
+        else receivedItems = receivedItems.concat(items)
+    }
+
+    function onDisconnected() {
+        console.log("Archipelago Disconnected")
+        setActive(false)
+    }
+
+    function onReceiveMessage(msg: string) {
+        setTextClient(curr => [...curr, msg])
+    }
+
+    function giveItems(items: Item[]) {
+        for (let item of items) {
+            console.log("received item: " + item.name);
+
+            if (item.name.endsWith("Rune") && !item.name.startsWith("Broken")) {
+                setRunesAquired(curr => [...curr, item.name])
+            }
+            else {
+                setTrashAquired(curr => curr++)
+            }
+        }
+    }
+
+    function sendMessage(msg: string) {
+        console.log("Message Sent: " + msg)
+    }
+
+    function sendLocation(loc: Location) {
+        console.log("Location Sent: " + loc.name)
+    }
     
     return (
-        <SessionContext value={{ playerName: "Nikki", isActive: false, regions: regions, options: options}}>
+        <SessionContext value={{ 
+                textClient: textClient, 
+                apService: apService, 
+                checkedLocIds: checkedLocIds,
+                playerName: playerName, 
+                isActive: isActive, 
+                regions: regions, 
+                playerOptions: playerOptions, 
+                runesAquired: runesAquired,
+                trashAquired: trashAquired,
+                connectAndProcess: connectAndProcess, 
+                sendMessage: sendMessage, 
+                sendLocation: sendLocation,
+            }}>
             {children}
         </SessionContext>
     )

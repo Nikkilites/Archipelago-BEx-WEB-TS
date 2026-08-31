@@ -2,19 +2,25 @@ import { useState, type SubmitEvent } from "react"
 
 import { Button } from '../components/Buttons'
 import { InputField } from '../components/InputField'
+
 import { useLocalStorage } from "../hooks/useLocalStorage"
+import { useSession } from "../context/SessionContext"
 
 export function LoginForm() {
+    const { connectAndProcess } = useSession()
+
     const [error, setError] = useState("")
 
     const [server, setServer] = useLocalStorage<string>("server", "")
     const [name, setName] = useLocalStorage<string>("name", "")
     const [pass, setPass] = useLocalStorage<string>("pass", "")
 
-    function submitLogin(e: SubmitEvent) {
+    async function submitLogin(e: SubmitEvent) {
         e.preventDefault()
 
         if (server.trim() === "" || name.trim() === "") return
+
+        await connectAndProcess(server, name, pass)
 
         setError("Connection failed. Please refresh the room, check your login info and the room data, then try again.")
     }
@@ -57,7 +63,7 @@ export function LoginForm() {
             </div>
 
             {error !== "" && 
-                <div className='legacy:bg-legacy-red-100 legacy:rounded-lg border legacy:border-legacy-red-200 viking:border-viking-red-200 viking:text-viking-red-100 viking:bg-viking-beige-200'>
+                <div className='mb-3 legacy:bg-legacy-red-100 legacy:rounded-lg border legacy:border-legacy-red-200 viking:border-viking-red-200 viking:text-viking-red-100 viking:bg-viking-beige-200'>
                     <label className='p-5 flex text-center legacy:text-legacy-red-400'>{error}</label>
                 </div>
             }
