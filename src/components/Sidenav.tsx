@@ -9,11 +9,11 @@ type NavProps = {
 }
 
 export function SideNav({ children, onPageChange }: NavProps) {
-  const { options, regions } = useSession()
+  const { playerOptions, regions, runesAquired, checkedLocIds } = useSession()
 
-  const treasurousRegions = regions.filter(region => region.getIsOpen(options.RunesRequired) && !region.getTreasureFound() && !region.getIsFinished())
-  const treasurelessRegions = regions.filter(region => region.getIsOpen(options.RunesRequired) && region.getTreasureFound() && !region.getIsFinished())
-  const raidedRegions = regions.filter(region => region.getIsOpen(options.RunesRequired) && region.getIsFinished())
+  const treasurousRegions = regions.filter(region => region.getIsOpen(runesAquired, playerOptions.RunesRequired) && !region.getTreasureFound(checkedLocIds) && !region.getIsFinished(checkedLocIds))
+  const treasurelessRegions = regions.filter(region => region.getIsOpen(runesAquired, playerOptions.RunesRequired) && region.getTreasureFound(checkedLocIds) && !region.getIsFinished(checkedLocIds))
+  const raidedRegions = regions.filter(region => region.getIsOpen(runesAquired, playerOptions.RunesRequired) && region.getIsFinished(checkedLocIds))
 
 
   return (
@@ -24,7 +24,7 @@ export function SideNav({ children, onPageChange }: NavProps) {
           <NavItem page="Home" onPageChange={onPageChange} active={children === "Home"} finished={false}>Home</NavItem>
           <NavItem page="TextClient" onPageChange={onPageChange} active={children === "TextClient"} finished={false}>Text Client</NavItem>
 
-          {(options.HintShopCost != 0) && <NavItem page="TrashExchange" onPageChange={onPageChange} active={children === "TrashExchange"} finished={false}>Trash Exchange</NavItem>}
+          {(playerOptions.HintShopCost != 0) && <NavItem page="TrashExchange" onPageChange={onPageChange} active={children === "TrashExchange"} finished={false}>Trash Exchange</NavItem>}
 
           {treasurousRegions.length !== 0 &&
             <div>
@@ -32,7 +32,7 @@ export function SideNav({ children, onPageChange }: NavProps) {
               <div className="border-t legacy:border-t-zinc-500 viking:border-t-viking-green-100"></div>
 
               {treasurousRegions.map(region => (
-                <NavItem page={region.islandName} onPageChange={onPageChange} key={region.name} active={children === region.name} finished={region.getIsFinished()}>{region.islandName}</NavItem>
+                <NavItem page={region.islandName} onPageChange={onPageChange} key={region.islandName} active={children === region.islandName} finished={region.getIsFinished(checkedLocIds)}>{region.islandName}</NavItem>
               ))}
             </div>
           }
@@ -43,7 +43,7 @@ export function SideNav({ children, onPageChange }: NavProps) {
               <div className="border-t legacy:border-t-zinc-500 viking:border-t-viking-green-100"></div>
 
               {treasurelessRegions.map(region => (
-                <NavItem page={region.islandName} onPageChange={onPageChange} key={region.name} active={children === region.name} finished={region.getIsFinished()}>{region.islandName}</NavItem>
+                <NavItem page={region.islandName} onPageChange={onPageChange} key={region.name} active={children === region.name} finished={region.getIsFinished(checkedLocIds)}>{region.islandName}</NavItem>
               ))}
             </div>
           }
@@ -54,7 +54,7 @@ export function SideNav({ children, onPageChange }: NavProps) {
               <div className="border-t legacy:border-t-zinc-500 viking:border-t-viking-green-100"></div>
 
               {raidedRegions.map(region => (
-                <NavItem page={region.islandName} onPageChange={onPageChange} key={region.name} active={children === region.name} finished={region.getIsFinished()}>{region.islandName}</NavItem>
+                <NavItem page={region.islandName} onPageChange={onPageChange} key={region.name} active={children === region.name} finished={region.getIsFinished(checkedLocIds)}>{region.islandName}</NavItem>
               ))}
             </div>
           }

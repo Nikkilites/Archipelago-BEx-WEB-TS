@@ -60,7 +60,7 @@ function ConnectedPage({ page, onPageChange }: PageProps) {
             'Home': <Home/>,
             'TextClient': <TextClient/>,
             'TrashExchange': <TrashExchange/>
-          }[page] || <Island>page</Island>
+          }[page] || <Island>{page}</Island>
         }
       </div>
     </div>
