@@ -16,8 +16,8 @@ export class Location {
     this.scoutedItem = scoutedItem;
   }
 
-  public getIsChecked(checkedLocationIds: number[]) {
-    return checkedLocationIds.includes(this.id)
+  public getIsInList(locationIds: number[]) {
+    return locationIds.includes(this.id)
   }
 
   public getScoutedItemString(): string {
