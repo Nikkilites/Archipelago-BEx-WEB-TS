@@ -1,17 +1,58 @@
-import { Client } from "archipelago.js";
+import { Client, Item } from "archipelago.js";
 
-// Login to the server. Replace `archipelago.gg:XXXXX` and `Phar` with the address/url and slot name for your room.
-// If no game is provided, client will connect in "TextOnly" mode, which is fine for this example.
-export function connect() {
-    // Create a new instance of the Client class.
-    const client = new Client();
+export class ArchipelagoService {
+    client = new Client();
 
-    // Set up an event listener for whenever a message arrives and print the plain-text content to the console.
-    client.messages.on("message", (content) => {
-        console.log(content);
-    });
+    public connect(onDisconnected: () => void, onReceiveItems: (items: Item[]) => void, onReceiveMessage: (msg: string) => void, server: string, name: string, pass: string) {
 
-    client.login("archipelago.gg:40831", "Nikki")
-        .then(() => console.log("Connected to the Archipelago server!"))
-        .catch(console.error);
+        this.client.messages.on("message", (content) => {
+            onReceiveMessage(content);
+        });
+
+        this.client.items.on("itemsReceived", (content) => {
+            onReceiveItems(content);
+        });
+
+        this.client.socket.on("disconnected", () => {
+            onDisconnected()
+            this.client.messages.off
+            this.client.items.off
+        })
+
+        const promise = this.client.login(server, name, "Backlog Expedition", {slotData: true, password: pass})
+
+        return promise
+    }
+
+    public disconnect() {
+        this.client.socket.disconnect()
+    }
+
+    public sendLocation(locId: number) {
+        this.client.check(locId)
+    }
+
+    public sendLocationHint(locId: number) {
+        this.client.hint([locId])
+    }
+
+    public sendMessage(msg: string) {
+        this.client.messages.say(msg)
+    }
+
+    public getLocationName(locId: number): string {
+        return this.client.package.lookupLocationName("Backlog Expedition", locId)
+    }
+
+    public getAllLocationIds(): number[] {
+        return this.client.room.allLocations
+    }
+
+    public getCheckedLocationIds(): number[] {
+        return this.client.room.checkedLocations
+    }
+
+    public scoutLocations(locIds: number[]) {
+        return this.client.scout(locIds,0)
+    }
 }
