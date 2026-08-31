@@ -2,18 +2,17 @@ import { useSession } from '../context/SessionContext'
 import { Title } from './Title'
 
 export function Home() {
-    const { regions, options } = useSession()
-
-    const treasuresFound = regions.filter(r => r.getTreasureFound()).length
+    const { regions, playerOptions, runesAquired, checkedLocIds } = useSession()
+    const treasuresFound = regions.filter(r => r.getTreasureFound(checkedLocIds)).length
 
     return ( 
         <div className="flex flex-col gap-4">
             <div>
                 <Title>Treasure</Title>
-                <h5>Treasures found: {treasuresFound}/{options.TreasuresToGoal}</h5>
+                <h5>Treasures found: {treasuresFound}/{playerOptions.TreasuresToGoal}</h5>
 
                 <div className="flex flex-wrap gap-2.5 items-center pt-4">
-                    {regions.filter(r => r.getTreasureFound()).map(region => (
+                    {regions.filter(r => r.getTreasureFound(checkedLocIds)).map(region => (
                         <GridContent key={region.name} title={region.treasureName} subtitle={region.islandName}></GridContent>
                     ))}
                 </div>
@@ -22,7 +21,7 @@ export function Home() {
                 <Title>Runes</Title>
                 <div className="flex flex-wrap gap-2.5 items-center pt-4">
                     {regions.filter(r => r.name != "Starting").map(region => (
-                        <GridContent key={region.name} title={region.runeName} subtitle={region.runeCount + "/" + options.RunesRequired}></GridContent>
+                        <GridContent key={region.name} title={region.runeName} subtitle={region.getRuneCount(runesAquired) + "/" + playerOptions.RunesRequired}></GridContent>
                     ))}
                 </div>
             </div>
