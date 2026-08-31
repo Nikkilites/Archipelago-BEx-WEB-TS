@@ -21,7 +21,7 @@ export function Island({ children }: IslandProps) {
             <Title>{children}</Title>
 
             {region?.getIsFinished 
-                ? <h5 className="font-bold text-l mt-1 mb-3">This island has been fully raided!</h5> 
+                ? <h5 className="font-bold text-l mt-1 mb-3 legacy:font-normal">This island has been fully raided!</h5> 
                 : (region?.getTreasureFound && <h5>You have found the treasure on this island!</h5>)
             }
 
@@ -29,7 +29,7 @@ export function Island({ children }: IslandProps) {
             <div className="flex flex-col gap-2">
                 {region!.locations.map(loc => (
                     <div key={loc.id} className="flex flex-row items-center gap-2">
-                        <input type="checkbox" className="w-4 h-4"/>
+                        <input type="checkbox" id={loc.id.toString()} className="appearance-none w-4 h-4 relative border rounded-sm hover:ring hover:cursor-pointer legacy:ring-zinc-500 legacy:checked:bg-zinc-300 legacy:border-zinc-500 viking:checked:bg-viking-green-600 viking:checked:border-viking-green-700 viking:ring-viking-red-400 viking:checked:ring-viking-green-700 viking:checked:border-2 viking:border-viking-red-300 viking:bg-viking-beige-300"/>
 
 
                         <Button variant = "small" className="text-sm">Send</Button>
