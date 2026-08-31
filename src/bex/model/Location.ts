@@ -17,6 +17,6 @@ export class Location {
   }
 
   public getIsChecked(checkedLocationIds: number[]) {
-    return this.id in checkedLocationIds
+    return checkedLocationIds.includes(this.id)
   }
 }
