@@ -1,7 +1,8 @@
 {
   "name": "archipelago-bex-web-ts",
   "private": true,
-  "version": "0.0.0",
+  "version": "4.0",
+  "homepage": "https://nikkilites.github.io/Archipelago-BEx-WEB-TS/",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -30,6 +31,7 @@
     "eslint": "^10.8.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.3",
+    "gh-pages": "^6.3.0",
     "globals": "^17.7.0",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.65.0",
