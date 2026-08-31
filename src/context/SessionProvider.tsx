@@ -101,6 +101,13 @@ export function SessionProvider({ children }: SessionProviderProps) {
     function onDisconnected() {
         console.log("Archipelago Disconnected")
         setActive(false)
+        setPlayerName("name")
+        setPlayerOptions(new PlayerOptions(0,0,0))
+        setRunesAquired([])
+        setTrashAquired(0)
+        setRegions([])
+        setCheckedLocIds([])
+        setTextClient([])
     }
 
     function onReceiveMessage(msg: string) {
