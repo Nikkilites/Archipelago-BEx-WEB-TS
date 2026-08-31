@@ -19,4 +19,8 @@ export class Location {
   public getIsChecked(checkedLocationIds: number[]) {
     return checkedLocationIds.includes(this.id)
   }
+
+  public getScoutedItemString(): string {
+    return this.name + " for " + this.scoutedItem?.receiver.alias
+  }
 }
