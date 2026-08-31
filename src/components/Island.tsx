@@ -1,21 +1,36 @@
 import type { ReactNode } from "react"
 
 import { Title } from '../components/Title'
+import { useSession } from "../context/SessionContext"
 
 type IslandProps = {
-  children: ReactNode,
+  children: ReactNode
 }
 
 export function Island({ children }: IslandProps) {
-  return ( 
-    <div className="regions-container">
-        <Title>{children}</Title>
-    </div>
-  )
+    const { checkedLocIds, regions } = useSession()
+
+    console.log(checkedLocIds.length)
+
+    const region = regions.find(reg => reg.islandName == children)
+
+    return ( 
+        <div className="regions-container">
+            <Title>{children}</Title>
+            <div className="flex flex-col gap-2">
+                {region!.locations.map(loc => (
+                    <div key={loc.id}>
+                        <p className="location-name">{loc.name}</p>
+                        <p>is checked: {loc.getIsChecked(checkedLocIds) ? "true" : "false"}</p>
+                        <p className="location-hint">{loc.objective}</p>
+                        <p>{loc.scoutedItem?.name} for {loc.scoutedItem?.receiver.alias}</p>
+                    </div>
+                ))}
+            </div>
+        </div>
+    )
 }
 /*
-
-            {Region region = @CurrentSession.RegionHandler.Regions.FirstOrDefault(r => r.Name == SelectedSidebarItem)}
 
             {if (region.LocationsLeft <= 0)}
             {
@@ -59,7 +74,7 @@ export function Island({ children }: IslandProps) {
                     </div>
 
                 </div>
-        }
+            }
     </div>
   )
 }
