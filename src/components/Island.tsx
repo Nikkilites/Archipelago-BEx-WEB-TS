@@ -9,7 +9,7 @@ type IslandProps = {
 }
 
 export function Island({ children }: IslandProps) {
-    const { checkedLocIds, regions } = useSession()
+    const { regions } = useSession()
 
     const [selectedLocs, setSelectedLocs] = useState([])
 
