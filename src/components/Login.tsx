@@ -26,7 +26,7 @@ export function LoginForm() {
     }
 
     return (
-        <div className='w-75 flex flex-col mx-auto gap-3 viking:pt-4'>
+        <div className='mt-4 w-85 flex flex-col mx-auto gap-3 viking:pt-4'>
             <div className='legacy:bg-legacy-blue-100 legacy:rounded-lg legacy:border legacy:border-legacy-blue-200 nordic:bg-nordic-red-500 nordic:border-4 nordic:border-nordic-red-400 viking:bg-viking-green-600'>
                 <div className="viking:h-full viking:p-2 viking:border-viking-green-700">
                     <form 
