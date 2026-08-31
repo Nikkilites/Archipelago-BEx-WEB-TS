@@ -9,7 +9,7 @@ type IslandProps = {
 export function Island({ children }: IslandProps) {
   return ( 
     <div className="regions-container">
-        <Title>{children} Island</Title>
+        <Title>{children}</Title>
     </div>
   )
 }
