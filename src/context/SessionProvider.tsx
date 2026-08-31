@@ -51,8 +51,6 @@ export function SessionProvider({ children }: SessionProviderProps) {
     }
 
     function SetupSlot(slotData: JSONRecord) {
-        console.log(slotData)
-
         let treasuresToGoal = ("treasures_to_goal" in slotData ? slotData["treasures_to_goal"] : slotData["beaten_to_goal"]) as number
         let hintShopCost = "hint_shop_cost" in slotData ? slotData["hint_shop_cost"] as number : 20
 
@@ -61,37 +59,36 @@ export function SessionProvider({ children }: SessionProviderProps) {
     }
 
     function createRegions(objectives: JSONRecord) {
-        //Create Locations
         let allLocationIds = apService.getAllLocationIds()
         let allLocations: Location[] = []
 
-        let scoutedItems: Item[] = []
         apService.scoutLocations(allLocationIds)
-            .then((value) => scoutedItems = value)
+            .then((scoutedItems) => {
+
+                //Create Locations
+                for (const id of allLocationIds) {
+                    allLocations = allLocations.concat(new Location(
+                        apService.getLocationName(id), 
+                        id, 
+                        objectives[id.toString()] as string,
+                        scoutedItems.find(value => value.locationId === id)
+                    ))
+                }
+                
+                //Create Regions
+                let allRegions: Region[] = []
+
+                for (const [name,treasure] of Object.entries(RegionData)) {
+                    const regionLocs = allLocations.filter(loc => loc.regionName == name)
+
+                    if (regionLocs.length == 0) continue
+
+                    allRegions = allRegions.concat(new Region(name, treasure, regionLocs))
+                }
+
+                setRegions(allRegions)
+            })
             .catch(console.error)
-
-
-        for (const id of allLocationIds) {
-            allLocations = allLocations.concat(new Location(
-                apService.getLocationName(id), 
-                id, 
-                objectives[id.toString()] as string,
-                scoutedItems.find(value => value.locationId === id)
-            ))
-        }
-
-        //Create Regions
-        let allRegions: Region[] = []
-
-        for (const [name,treasure] of Object.entries(RegionData)) {
-            const regionLocs = allLocations.filter(loc => loc.regionName == name)
-
-            if (regionLocs.length == 0) continue
-
-            allRegions = allRegions.concat(new Region(name, treasure, regionLocs))
-        }
-
-        setRegions(allRegions)
     }
 
     function onReceiveItems(items: Item[]) {
@@ -107,6 +104,7 @@ export function SessionProvider({ children }: SessionProviderProps) {
     }
 
     function onReceiveMessage(msg: string) {
+        console.log("Message received: " + msg)
         setTextClient(curr => [...curr, msg])
     }
 
