@@ -25,10 +25,10 @@ export class Region {
   }
 
   public getIsFinished(checkedLocationIds: number[]) {
-    return this.locations.filter(loc => loc.getIsChecked(checkedLocationIds)).length == this.locations.length
+    return this.locations.filter(loc => loc.getIsInList(checkedLocationIds)).length == this.locations.length
   }
 
   public getTreasureFound(checkedLocationIds: number[]) {
-    return this.locations.filter(loc => !loc.getIsChecked(checkedLocationIds) && loc.name.charAt(0) === 'S').length == 0
+    return this.locations.filter(loc => !loc.getIsInList(checkedLocationIds) && loc.name.charAt(0) === 'S').length == 0
   }
 }
