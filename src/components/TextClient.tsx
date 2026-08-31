@@ -1,31 +1,34 @@
 import { useState, type SubmitEvent } from "react"
 
+import { useSession } from "../context/SessionContext"
+
 import { InputField } from '../components/InputField'
 import { Button } from '../components/Buttons'
 import { Title } from '../components/Title'
 
 export function TextClient() {
-  const [msg, setMsg] = useState("")
+    const { textClient } = useSession()
+    const [msg, setMsg] = useState("")
 
-  return ( 
-    <div className="flex flex-1 flex-col h-full pr-3 gap-4 Stuff here about what the page looks like">
-        <Title>Text Client</Title>
-        <label className='w-full p-2 flex flex-col max-h-100 viking:bg-viking-beige-300 viking:border viking:border-viking-beige-500 viking:text-viking-red-400'>
-            <p>- Text Client Here</p>
-            <p>- Text Client Here</p>
-            <p>- Text Client Here</p>
-        </label>
-        <form className="flex flex-row gap-2 justify-items-stretch" onSubmit={submitMessage}>
-            <InputField 
-                placeholder="Type message..."
-                type="text" 
-                value={msg}
-                onChange={e => setMsg(e.target.value)}>
-            </InputField>
-            <Button disabled={msg.trim() === ""}>Send</Button>
-        </form>
-    </div>
-  )
+    return ( 
+        <div className="flex flex-1 flex-col h-full pr-3 gap-4 scrollbar-auto">
+            <Title>Text Client</Title>
+            <label className='w-full p-2 flex flex-col min-h-100 max-h-100 viking:bg-viking-beige-300 viking:border viking:border-viking-beige-500 viking:text-viking-red-400'>
+                {textClient.map(line => (
+                    <p key={line}>{line}</p>
+                ))}
+            </label>
+            <form className="flex flex-row gap-2 justify-items-stretch" onSubmit={submitMessage}>
+                <InputField 
+                    placeholder="Type message..."
+                    type="text" 
+                    value={msg}
+                    onChange={e => setMsg(e.target.value)}>
+                </InputField>
+                <Button disabled={msg.trim() === ""}>Send</Button>
+            </form>
+        </div>
+    )
 }
 
 function submitMessage(e: SubmitEvent) {
