@@ -10,8 +10,6 @@ type IslandProps = {
 export function Island({ children }: IslandProps) {
     const { checkedLocIds, regions } = useSession()
 
-    console.log(checkedLocIds.length)
-
     const region = regions.find(reg => reg.islandName == children)
 
     return ( 
@@ -23,7 +21,6 @@ export function Island({ children }: IslandProps) {
                         <p className="location-name">{loc.name}</p>
                         <p>is checked: {loc.getIsChecked(checkedLocIds) ? "true" : "false"}</p>
                         <p className="location-hint">{loc.objective}</p>
-                        <p>{loc.scoutedItem?.name} for {loc.scoutedItem?.receiver.alias}</p>
                     </div>
                 ))}
             </div>

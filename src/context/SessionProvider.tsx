@@ -110,7 +110,7 @@ export function SessionProvider({ children }: SessionProviderProps) {
 
     function giveItems(items: Item[]) {
         for (let item of items) {
-            console.log("received item: " + item.name);
+            console.log("Give item: " + item.name);
 
             if (item.name.endsWith("Rune") && !item.name.startsWith("Broken")) {
                 setRunesAquired(curr => [...curr, item.name])
