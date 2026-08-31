@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react"
+import { type ReactNode } from "react"
 
 import { Title } from '../components/Title'
 import { useSession } from "../context/SessionContext"
@@ -11,7 +11,7 @@ type IslandProps = {
 export function Island({ children }: IslandProps) {
     const { regions } = useSession()
 
-    const [selectedLocs, setSelectedLocs] = useState([])
+//    const [selectedLocs, setSelectedLocs] = useState([])
 
     const region = regions.find(reg => reg.islandName == children)
 
