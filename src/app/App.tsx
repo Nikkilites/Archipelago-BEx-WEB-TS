@@ -81,6 +81,7 @@ function Header({ theme }: HeaderProps) {
         <header className="flex items-center justify-between">
           <div className="flex flex-col">
             <h1 className="legacy:text-2xl legacy:font-semibold nordic:text-4xl nordic:font-norse nordic:font-bold nordic:text-nordic-parchment-100 viking:text-viking-red-300 viking:text-3xl viking:font-extrabold">Backlog Expedition</h1>
+            <span className="legacy:text-zinc-700 nordic:text-nordic-parchment-200 viking:text-viking-red-300">Please be aware that this is an unfinished WIP</span>
             {isActive && <span className="legacy:text-zinc-700 nordic:text-nordic-parchment-200 viking:text-viking-red-300">Welcome {playerName}, you are connected to Archipelago!</span>}
           </div>
 
