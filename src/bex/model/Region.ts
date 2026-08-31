@@ -1,4 +1,4 @@
-import type { Location } from "./Location";
+import { Location } from "./Location";
 
 export class Region {
     name: string;
@@ -25,10 +25,10 @@ export class Region {
   }
 
   public getIsFinished(checkedLocationIds: number[]) {
-    return this.locations.filter(loc => !loc.getIsChecked(checkedLocationIds)).length === 0
+    return this.locations.filter(loc => loc.getIsChecked(checkedLocationIds)).length == this.locations.length
   }
 
   public getTreasureFound(checkedLocationIds: number[]) {
-    return this.locations.filter(loc => !loc.getIsChecked(checkedLocationIds) && loc.name.charAt(0) === 'S').length === 0
+    return this.locations.filter(loc => !loc.getIsChecked(checkedLocationIds) && loc.name.charAt(0) === 'S').length == 0
   }
 }
