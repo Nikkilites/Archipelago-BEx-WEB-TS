@@ -16,7 +16,7 @@ export function SideNav({ children, onPageChange }: NavProps) {
   const raidedRegions = regions.filter(region => region.getIsOpen(runesAquired, playerOptions.RunesRequired) && region.getIsFinished(checkedLocIds))
 
   return (
-    <div className='w-64 flex-none h-full legacy:border legacy:bg-legacy-blue-100 legacy:rounded-lg legacy:border-legacy-blue-200 nordic:bg-nordic-red-500 nordic:border-4 nordic:border-nordic-red-400 viking:bg-viking-green-600'>
+    <div className='w-64 flex-none legacy:border legacy:bg-legacy-blue-100 legacy:rounded-lg legacy:border-legacy-blue-200 nordic:bg-nordic-red-500 nordic:border-4 nordic:border-nordic-red-400 viking:bg-viking-green-600'>
       <div className="p-3 h-full viking:p-2 viking:border-viking-green-700">
         <div className="flex flex-col h-full gap-1 viking:p-3 viking:border viking:rounded-lg viking:border-viking-green-100">
 

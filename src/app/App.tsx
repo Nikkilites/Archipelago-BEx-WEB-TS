@@ -31,9 +31,9 @@ export default function App() {
   return (
     <>
       <div className={theme + " scrollbar-none overflow-auto"}>
-        <div className="flex flex-col gap-4 h-screen justify-between nordic:font-pt nordic:bg-nordic-brown-700 viking:text-viking-green-700 viking:font-pt viking:bg-viking-beige-100 viking:gap-0">
+        <div className="flex flex-col gap-4 min-h-svh justify-between nordic:font-pt nordic:bg-nordic-brown-700 viking:text-viking-green-700 viking:font-pt viking:bg-viking-beige-100 viking:gap-0">
           <Header theme={theme} />
-          <div className='mb-auto h-full'>
+          <div className='flex flex-1'>
             {!isActive ? <LoginForm /> : <ConnectedPage onPageChange={onPageChange} page={activePage} />}
           </div>
           <Footer onThemeChange={onThemeChange}/>
@@ -52,9 +52,9 @@ type PageProps = {
 function ConnectedPage({ page, onPageChange }: PageProps) {
 
   return (
-    <div className='flex flex-row h-full w-full gap-4 pl-4 viking:pl-0'>
+    <div className='flex flex-1 w-full gap-4 pl-4 viking:pl-0'>
       <SideNav onPageChange={onPageChange}>{page}</SideNav>
-      <div className='viking:p-4 h-full w-full'>
+      <div className='viking:p-4 flex-1 flex grow'>
         {
           {
             'Home': <Home/>,
