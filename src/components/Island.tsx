@@ -1,17 +1,22 @@
-import { type ReactNode } from "react"
+import { useState, type ReactNode } from "react"
 
 import { Title } from '../components/Title'
 import { useSession } from "../context/SessionContext"
 import { Button } from "./Buttons"
+import type { Location } from "../bex/model/Location"
 
 type IslandProps = {
   children: ReactNode
 }
 
 export function Island({ children }: IslandProps) {
-    const { regions } = useSession()
+    const { regions, checkedLocIds } = useSession()
 
-//    const [selectedLocs, setSelectedLocs] = useState([])
+    const [selectedLocs, setSelectedLocs] = useState<number[]>([]);
+
+    function onCheckboxChange(loc: Location, checked: boolean) {
+        checked ? setSelectedLocs(locIds => [...locIds, loc.id]) : setSelectedLocs(locIds => locIds.filter(id => id !== loc.id))
+    }
 
     const region = regions.find(reg => reg.islandName == children)
 
@@ -20,22 +25,33 @@ export function Island({ children }: IslandProps) {
 
             <Title>{children}</Title>
 
-            {region?.getIsFinished 
-                ? <h5 className="font-bold text-l mt-1 mb-3 legacy:font-normal">This island has been fully raided!</h5> 
-                : (region?.getTreasureFound && <h5>You have found the treasure on this island!</h5>)
-            }
+            <div className="font-bold text-l mb-3 legacy:font-normal viking:text-viking-orange-300 opacity-80">
+                {region?.getIsFinished 
+                    ? <h5>This island has been fully raided!</h5> 
+                    : (region?.getTreasureFound && <h5>You have found the treasure on this island!</h5>)
+                }
+            </div>
 
 
             <div className="flex flex-col gap-2">
-                {region!.locations.map(loc => (
+                {region!.locations.filter(loc => !loc.getIsInList(checkedLocIds)).map(loc => (
                     <div key={loc.id} className="flex flex-row items-center gap-2">
-                        <input type="checkbox" id={loc.id.toString()} className="appearance-none w-4 h-4 relative border rounded-sm hover:ring hover:cursor-pointer legacy:ring-zinc-500 legacy:checked:bg-zinc-300 legacy:border-zinc-500 viking:checked:bg-viking-green-600 viking:checked:border-viking-green-700 viking:ring-viking-red-400 viking:checked:ring-viking-green-700 viking:checked:border-2 viking:border-viking-red-300 viking:bg-viking-beige-300"/>
+
+                        <input type="checkbox" id={loc.id.toString()} value={loc.id} onChange={(e) => onCheckboxChange(loc, e.target.checked)} className="appearance-none w-4 h-4 relative border rounded-sm hover:ring hover:cursor-pointer legacy:ring-zinc-600 legacy:checked:bg-zinc-400 legacy:border-zinc-600 viking:checked:bg-viking-red-200 viking:checked:border-viking-red-300 viking:ring-viking-red-300 viking:checked:ring-viking-red-300 viking:checked:border-2 viking:border-viking-beige-500 viking:bg-viking-beige-300 "/>
+                        <Button variant = "small" disabled={!loc.getIsInList(selectedLocs)} className="text-sm">Send</Button>
 
 
-                        <Button variant = "small" className="text-sm">Send</Button>
                         <div className="flex flex-col">
-                            <p className="font-medium">{loc.name}</p>
-                            <p className="text-sm mb-0.5 legacy:text-zinc-800 viking:text-viking-green-100">{loc.objective}</p>
+                            <p className="font-normal">{loc.name}</p>
+                            <p className="text-sm mb-0.5 legacy:text-zinc-500 viking:text-viking-green-100">{loc.objective}</p>
+                        </div>
+                    </div>
+                ))}
+                {region!.locations.filter(loc => loc.getIsInList(checkedLocIds)).map(loc => (
+                    <div key={loc.id} className="flex flex-row items-center gap-2">
+                        <div className="flex flex-col legacy:opacity-70 italic viking:opacity-80">
+                            <p className="font-normal">{loc.name}</p>
+                            <p className="text-sm mb-0.5 legacy:text-zinc-500 viking:text-viking-green-100">{loc.objective}</p>
                         </div>
                     </div>
                 ))}
