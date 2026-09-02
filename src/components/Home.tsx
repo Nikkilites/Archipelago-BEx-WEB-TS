@@ -9,7 +9,7 @@ export function Home() {
         <div className="flex flex-col gap-4">
             <div>
                 <Title>Treasure</Title>
-                <h5>Treasures found: {treasuresFound}/{playerOptions.TreasuresToGoal}</h5>
+                <h5 className="font-bold text-l legacy:font-normal viking:text-viking-orange-300 opacity-80">Treasures found: {treasuresFound}/{playerOptions.TreasuresToGoal}</h5>
 
                 <div className="flex flex-wrap gap-2.5 items-center pt-4">
                     {regions.filter(r => r.getTreasureFound(checkedLocIds)).map(region => (
@@ -37,7 +37,7 @@ type contentProps = {
 function GridContent({ title, subtitle }: contentProps) {
   return (
     <div className="flex flex-col items-center text-center w-32 gap-0.5">
-        <div className="font-bold text-sm">{title}</div>
+        <div className="legacy:font-medium viking:font-semibold text-sm">{title}</div>
         <div className="font-light legacy:text-zinc-500 viking:text-viking-green-100 text-xs">{subtitle}</div>
     </div>
   )
