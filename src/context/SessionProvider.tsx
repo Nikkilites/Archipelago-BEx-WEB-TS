@@ -91,6 +91,11 @@ export function SessionProvider({ children }: SessionProviderProps) {
             .catch(console.error)
     }
 
+    function disconnect() {
+        console.log("Logging player out")
+        apService.disconnect()
+    }
+
     function onReceiveItems(items: Item[]) {
         console.log("Item received: " + items)
 
@@ -148,6 +153,7 @@ export function SessionProvider({ children }: SessionProviderProps) {
                 runesAquired: runesAquired,
                 trashAquired: trashAquired,
                 connectAndProcess: connectAndProcess, 
+                disconnect: disconnect,
                 sendMessage: sendMessage, 
                 sendLocation: sendLocation,
             }}>

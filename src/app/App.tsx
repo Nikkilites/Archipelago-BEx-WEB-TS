@@ -73,7 +73,7 @@ type HeaderProps = {
 }
 
 function Header({ theme }: HeaderProps) {
-  const { playerName, isActive } = useSession()
+  const { playerName, isActive, disconnect } = useSession()
 
   return (
     <div className='viking:flex viking:flex-col'>
@@ -85,7 +85,7 @@ function Header({ theme }: HeaderProps) {
             {isActive && <span className="legacy:text-zinc-700 nordic:text-nordic-parchment-200 viking:text-viking-red-300">Welcome {playerName}, you are connected to Archipelago!</span>}
           </div>
 
-          {isActive && <div className="flex items-end"><Button>Logout</Button></div>}
+          {isActive && <div className="flex items-end"><Button onClick={disconnect}>Logout</Button></div>}
         </header>
       </div>
       <div className="viking:border-b-2 viking:bg-viking-beige-200 viking:border-b-viking-beige-500 flex">

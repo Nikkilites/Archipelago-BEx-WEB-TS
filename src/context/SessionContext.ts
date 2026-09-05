@@ -24,6 +24,7 @@ type Context = {
   regions: Region[]
 
   connectAndProcess: (server: string, name: string, pass: string) => void
+  disconnect: () => void
   sendMessage: (msg: string) => void
   sendLocation: (loc: Location) => void
 }
