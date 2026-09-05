@@ -10,7 +10,7 @@ type IslandProps = {
 }
 
 export function Island({ children }: IslandProps) {
-    const { regions, checkedLocIds } = useSession()
+    const { regions, checkedLocIds, sendLocation } = useSession()
 
     const [selectedLocs, setSelectedLocs] = useState<number[]>([]);
 
@@ -26,9 +26,9 @@ export function Island({ children }: IslandProps) {
             <Title>{children}</Title>
 
             <div className="font-bold text-l mb-3 legacy:font-normal viking:text-viking-orange-300 opacity-80">
-                {region?.getIsFinished 
+                {region?.getIsFinished(checkedLocIds) 
                     ? <h5>This island has been fully raided!</h5> 
-                    : (region?.getTreasureFound && <h5>You have found the treasure on this island!</h5>)
+                    : (region?.getTreasureFound(checkedLocIds) && <h5>You have found the treasure on this island!</h5>)
                 }
             </div>
 
@@ -38,7 +38,7 @@ export function Island({ children }: IslandProps) {
                     <div key={loc.id} className="flex flex-row items-center gap-2">
 
                         <input type="checkbox" id={loc.id.toString()} value={loc.id} onChange={(e) => onCheckboxChange(loc, e.target.checked)} className="appearance-none w-4 h-4 relative border rounded-sm hover:ring hover:cursor-pointer legacy:ring-zinc-600 legacy:checked:bg-zinc-400 legacy:border-zinc-600 viking:checked:bg-viking-red-200 viking:checked:border-viking-red-300 viking:ring-viking-red-300 viking:checked:ring-viking-red-300 viking:checked:border-2 viking:border-viking-beige-500 viking:bg-viking-beige-300 "/>
-                        <Button variant = "small" disabled={!loc.getIsInList(selectedLocs)} className="text-sm">Send</Button>
+                        <Button variant = "small" disabled={!loc.getIsInList(selectedLocs)} className="text-sm" onClick={() => sendLocation(loc)}>Send</Button>
 
 
                         <div className="flex flex-col">
