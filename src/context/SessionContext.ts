@@ -23,7 +23,7 @@ type Context = {
   playerOptions: PlayerOptions
   regions: Region[]
 
-  connectAndProcess: (server: string, name: string, pass: string) => void
+  connectAndProcess: (server: string, name: string, pass: string) => Promise<boolean>
   disconnect: () => void
   sendMessage: (msg: string) => void
   sendLocation: (loc: Location) => void

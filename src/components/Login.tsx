@@ -10,6 +10,7 @@ export function LoginForm() {
     const { connectAndProcess } = useSession()
 
     const [error, setError] = useState("")
+    const [connecting, setConnecting] = useState(false)
 
     const [server, setServer] = useLocalStorage<string>("server", "")
     const [name, setName] = useLocalStorage<string>("name", "")
@@ -20,9 +21,15 @@ export function LoginForm() {
 
         if (server.trim() === "" || name.trim() === "") return
 
-        await connectAndProcess(server, name, pass)
+        setConnecting(true)
 
-        setError("Connection failed. Please refresh the room, check your login info and the room data, then try again.")
+        let result = await connectAndProcess(server, name, pass)
+
+        if (!result) {
+            setError("Connection failed. Please refresh the room, check your login info and the room data, then try again.")
+        }
+
+        setConnecting(false)
     }
 
     return (
@@ -57,7 +64,7 @@ export function LoginForm() {
                                 placeholder="Leave blank if no password">
                             </InputField>
                         </div>
-                        <Button variant="login" disabled={server.trim() === "" || name.trim() === ""}>Login & Connect</Button>
+                        <Button variant="login" disabled={server.trim() === "" || name.trim() === "" || connecting}>{connecting ? "Connecting..." : "Login & Connect"}</Button>
                     </form>
                 </div>
             </div>

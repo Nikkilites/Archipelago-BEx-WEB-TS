@@ -27,27 +27,29 @@ export function SessionProvider({ children }: SessionProviderProps) {
     let receivedItems: Item[] = []
 
     //Create all controller functions here
-    function connectAndProcess(server: string, name: string, pass: string) {
+    async function connectAndProcess(server: string, name: string, pass: string) {
         console.log("Try connect with Server: " + server + " | Name: " + name + " | Password: " + pass)
 
-        apService.connect(onDisconnected, onReceiveItems, onReceiveMessage, server, name, pass)
-            .then((value) => {
-                console.log("Connected to the Archipelago server!")
+        try {
+            let value = await apService.connect(onDisconnected, onReceiveItems, onReceiveMessage, server, name, pass)
 
-                setCheckedLocIds(apService.getCheckedLocationIds())
+            console.log("Connected to the Archipelago server!")
 
-                setPlayerName(name)
-                SetupSlot(value)
+            setCheckedLocIds(apService.getCheckedLocationIds())
 
-                setActive(true)
-                giveItems(receivedItems)
+            setPlayerName(name)
+            SetupSlot(value)
 
-                return true;
-            })
-            .catch(() => {
-                console.error
-                return false;
-            });
+            setActive(true)
+            giveItems(receivedItems)
+
+            return true;
+
+        } catch (error) {
+            console.log(error)
+            console.error
+            return false;
+        }
     }
 
     function SetupSlot(slotData: JSONRecord) {

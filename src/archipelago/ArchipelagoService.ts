@@ -3,7 +3,7 @@ import { Client, Item } from "archipelago.js";
 export class ArchipelagoService {
     client = new Client();
 
-    public connect(onDisconnected: () => void, onReceiveItems: (items: Item[]) => void, onReceiveMessage: (msg: string) => void, server: string, name: string, pass: string) {
+    async connect(onDisconnected: () => void, onReceiveItems: (items: Item[]) => void, onReceiveMessage: (msg: string) => void, server: string, name: string, pass: string) {
 
         this.client.messages.on("message", (content) => {
             onReceiveMessage(content);
@@ -19,7 +19,7 @@ export class ArchipelagoService {
             this.client.items.off
         })
 
-        const promise = this.client.login(server, name, "Backlog Expedition", {slotData: true, password: pass})
+        const promise = await this.client.login(server, name, "Backlog Expedition", {slotData: true, password: pass})
 
         return promise
     }
