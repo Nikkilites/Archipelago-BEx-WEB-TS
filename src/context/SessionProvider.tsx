@@ -30,6 +30,8 @@ export function SessionProvider({ children }: SessionProviderProps) {
     async function connectAndProcess(server: string, name: string, pass: string) {
         console.log("Try connect with Server: " + server + " | Name: " + name + " | Password: " + pass)
 
+        resetData()
+
         try {
             let value = await apService.connect(onDisconnected, onReceiveItems, onReceiveMessage, server, name, pass)
 
@@ -98,6 +100,17 @@ export function SessionProvider({ children }: SessionProviderProps) {
         apService.disconnect()
     }
 
+    function resetData() {
+        setActive(false)
+        setPlayerName("name")
+        setPlayerOptions(new PlayerOptions(0,0,0))
+        setRunesAquired([])
+        setTrashAquired(0)
+        setRegions([])
+        setCheckedLocIds([])
+        setTextClient([])
+    }
+
     function onReceiveItems(items: Item[]) {
         console.log("Item received: " + items)
 
@@ -107,14 +120,7 @@ export function SessionProvider({ children }: SessionProviderProps) {
 
     function onDisconnected() {
         console.log("Archipelago Disconnected")
-        setActive(false)
-        setPlayerName("name")
-        setPlayerOptions(new PlayerOptions(0,0,0))
-        setRunesAquired([])
-        setTrashAquired(0)
-        setRegions([])
-        setCheckedLocIds([])
-        setTextClient([])
+        resetData()
     }
 
     function onReceiveMessage(msg: string) {
@@ -141,6 +147,8 @@ export function SessionProvider({ children }: SessionProviderProps) {
 
     function sendLocation(loc: Location) {
         console.log("Location Sent: " + loc.name)
+        apService.sendLocation(loc.id)
+        setCheckedLocIds(curr => [...curr, loc.id])
     }
     
     return (
