@@ -42,7 +42,7 @@ export function SideNav({ children, onPageChange }: NavProps) {
               <div className="border-t legacy:border-t-zinc-500 viking:border-t-viking-green-100"></div>
 
               {treasurelessRegions.map(region => (
-                <NavItem page={region.islandName} onPageChange={onPageChange} key={region.name} active={children === region.name} finished={region.getIsFinished(checkedLocIds)}>{region.islandName}</NavItem>
+                <NavItem page={region.islandName} onPageChange={onPageChange} key={region.islandName} active={children === region.islandName} finished={region.getIsFinished(checkedLocIds)}>{region.islandName}</NavItem>
               ))}
             </div>
           }
@@ -53,7 +53,7 @@ export function SideNav({ children, onPageChange }: NavProps) {
               <div className="border-t legacy:border-t-zinc-500 viking:border-t-viking-green-100"></div>
 
               {raidedRegions.map(region => (
-                <NavItem page={region.islandName} onPageChange={onPageChange} key={region.name} active={children === region.name} finished={region.getIsFinished(checkedLocIds)}>{region.islandName}</NavItem>
+                <NavItem page={region.islandName} onPageChange={onPageChange} key={region.islandName} active={children === region.islandName} finished={region.getIsFinished(checkedLocIds)}>{region.islandName}</NavItem>
               ))}
             </div>
           }
