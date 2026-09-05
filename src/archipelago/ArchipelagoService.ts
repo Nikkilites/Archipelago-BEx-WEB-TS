@@ -5,23 +5,28 @@ export class ArchipelagoService {
 
     async connect(onDisconnected: () => void, onReceiveItems: (items: Item[]) => void, onReceiveMessage: (msg: string) => void, server: string, name: string, pass: string) {
 
-        this.client.messages.on("message", (content) => {
+        //Create Listeners:
+        let messageListener = (content: string) => {
             onReceiveMessage(content);
-        });
-
-        this.client.items.on("itemsReceived", (content) => {
+        };
+        let itemsListener = (content: Item[]) => {
             onReceiveItems(content);
-        });
+        };
+        let disconnectedListener = () => {
+            onDisconnected();
 
-        this.client.socket.on("disconnected", () => {
-            onDisconnected()
-            this.client.messages.off
-            this.client.items.off
-        })
+            this.client.messages.off("message", messageListener);
+            this.client.items.off("itemsReceived", itemsListener);
+            this.client.socket.off("disconnected", disconnectedListener);
+        };
 
-        const promise = await this.client.login(server, name, "Backlog Expedition", {slotData: true, password: pass})
+        //Start Listeners:
+        this.client.messages.on("message", messageListener);
+        this.client.items.on("itemsReceived", itemsListener);
+        this.client.socket.on("disconnected", disconnectedListener)
 
-        return promise
+        //Login:
+        return await this.client.login(server, name, "Backlog Expedition", {slotData: true, password: pass})
     }
 
     public disconnect() {
@@ -52,7 +57,7 @@ export class ArchipelagoService {
         return this.client.room.checkedLocations
     }
 
-    public scoutLocations(locIds: number[]) {
-        return this.client.scout(locIds,0)
+    async scoutLocations(locIds: number[]) {
+        return await this.client.scout(locIds,0)
     }
 }
