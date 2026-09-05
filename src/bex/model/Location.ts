@@ -12,7 +12,7 @@ export class Location {
     this.name = name;
     this.id = id;
     this.objective = objective;
-    this.regionName = name.split("in ")[1].split(" Island")[0];
+    this.regionName = name.split(" in ")[1].split(" Island")[0];
     this.scoutedItem = scoutedItem;
   }
 
