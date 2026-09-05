@@ -140,6 +140,7 @@ export function SessionProvider({ children }: SessionProviderProps) {
 
     function sendMessage(msg: string) {
         console.log("Message Sent: " + msg)
+        apService.sendMessage(msg)
     }
 
     function sendLocation(loc: Location) {
