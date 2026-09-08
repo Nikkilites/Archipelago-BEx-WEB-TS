@@ -10,14 +10,12 @@ import { TextClient } from '../components/TextClient'
 import { TrashExchange } from '../components/TrashExchange'
 import { Island } from '../components/Island'
 
-import { useState } from 'react'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 
 
 export default function App() {
-  const { isActive } = useSession()
+  const { isActive, activePage, setActivePage } = useSession()
 
-  const [activePage, setActivePage] = useState("Home")
   const [theme, setTheme] = useLocalStorage<string>("theme", "viking")
 
   function onThemeChange(theme: string) {

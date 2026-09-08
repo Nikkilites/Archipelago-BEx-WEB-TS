@@ -14,6 +14,8 @@ type SessionProviderProps = {
 }
 
 export function SessionProvider({ children }: SessionProviderProps) {
+    const [activePage, setActivePage] = useState("Home")
+    
     const [isActive, setActive] = useState<boolean>(false)
     const [playerName, setPlayerName] = useState<string>("name")
     const [playerOptions, setPlayerOptions] = useState<PlayerOptions>(new PlayerOptions(0,0,0))
@@ -105,6 +107,7 @@ export function SessionProvider({ children }: SessionProviderProps) {
 
     function resetData() {
         console.log("Resetting client data")
+        setActivePage("Home")
         setActive(false)
         setPlayerName("name")
         setPlayerOptions(new PlayerOptions(0,0,0))
@@ -160,6 +163,8 @@ export function SessionProvider({ children }: SessionProviderProps) {
                 playerOptions: playerOptions, 
                 runesAquired: runesAquired,
                 trashAquired: trashAquired,
+                activePage: activePage,
+                setActivePage: setActivePage,
                 connectAndProcess: connectAndProcess, 
                 disconnect: disconnect,
                 sendMessage: sendMessage, 

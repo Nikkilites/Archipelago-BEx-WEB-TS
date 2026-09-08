@@ -23,10 +23,13 @@ type Context = {
   playerOptions: PlayerOptions
   regions: Region[]
 
+  activePage: string
+
   connectAndProcess: (server: string, name: string, pass: string) => Promise<boolean>
   disconnect: () => void
   sendMessage: (msg: string) => void
   sendLocation: (loc: Location) => void
+  setActivePage: (page: string) => void
 }
 
 export let SessionContext = createContext<null | Context>(null)
