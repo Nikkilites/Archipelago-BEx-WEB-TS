@@ -1,15 +1,19 @@
 import { useSession } from '../context/SessionContext'
+import { Button } from './Buttons'
 import { Title } from './Title'
 
 export function Home() {
-    const { regions, playerOptions, runesAquired, checkedLocIds } = useSession()
+    const { regions, playerOptions, runesAquired, checkedLocIds, sendGoal } = useSession()
     const treasuresFound = regions.filter(r => r.getTreasureFound(checkedLocIds)).length
 
     return ( 
         <div className="flex flex-col gap-4">
             <div>
                 <Title>Treasure</Title>
-                <h5 className="font-bold text-l legacy:font-normal viking:text-viking-orange-300 opacity-80">Treasures found: {treasuresFound}/{playerOptions.TreasuresToGoal}</h5>
+                <div className='inline-flex gap-4'>
+                    <h5 className="font-bold text-l legacy:font-normal viking:text-viking-orange-300 opacity-80">Treasures found: {treasuresFound}/{playerOptions.TreasuresToGoal}</h5>
+                    {treasuresFound >= playerOptions.TreasuresToGoal && <Button variant = "small" disabled={false} className="text-sm px-2 py-0.5" onClick={sendGoal}>Send Goal!</Button>}
+                </div>
 
                 <div className="flex flex-wrap gap-2.5 items-center pt-4">
                     {regions.filter(r => r.getTreasureFound(checkedLocIds)).map(region => (

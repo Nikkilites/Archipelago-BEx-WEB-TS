@@ -151,6 +151,11 @@ export function SessionProvider({ children }: SessionProviderProps) {
         apService.sendLocation(loc.id)
         setCheckedLocIds(curr => [...curr, loc.id])
     }
+
+    function sendGoal() {
+        console.log("Goal Sent!")
+        apService.sendGoal()
+    }
     
     return (
         <SessionContext value={{ 
@@ -169,6 +174,7 @@ export function SessionProvider({ children }: SessionProviderProps) {
                 disconnect: disconnect,
                 sendMessage: sendMessage, 
                 sendLocation: sendLocation,
+                sendGoal: sendGoal,
             }}>
             {children}
         </SessionContext>

@@ -29,6 +29,7 @@ type Context = {
   disconnect: () => void
   sendMessage: (msg: string) => void
   sendLocation: (loc: Location) => void
+  sendGoal: () => void
   setActivePage: (page: string) => void
 }
 
