@@ -9,6 +9,7 @@ import { Home } from '../components/Home'
 import { TextClient } from '../components/TextClient'
 import { TrashExchange } from '../components/TrashExchange'
 import { Island } from '../components/Island'
+import { Locations } from '../components/Locations'
 
 import { useLocalStorage } from '../hooks/useLocalStorage'
 
@@ -57,7 +58,8 @@ function ConnectedPage({ page, onPageChange }: PageProps) {
           {
             'Home': <Home/>,
             'TextClient': <TextClient/>,
-            'TrashExchange': <TrashExchange/>
+            'TrashExchange': <TrashExchange/>,
+            'Locations': <Locations/>
           }[page] || <Island>{page}</Island>
         }
       </div>
