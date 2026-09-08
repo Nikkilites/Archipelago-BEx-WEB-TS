@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from "react"
 
-import { Title } from '../components/Title'
+import { Title } from './Title'
 import { useSession } from "../context/SessionContext"
 import { Button } from "./Buttons"
 import type { Location } from "../bex/model/Location"
@@ -34,27 +34,35 @@ export function Island({ children }: IslandProps) {
 
 
             <div className="flex flex-col gap-2">
-                {region!.locations.filter(loc => !loc.getIsInList(checkedLocIds)).map(loc => (
-                    <div key={loc.id} className="flex flex-row items-center gap-2">
+                {region!.locations
+                    .filter(loc => !loc.getIsInList(checkedLocIds))
+                    .sort((a, b) => Number(b.name.startsWith("Slay")) - Number(a.name.startsWith("Slay")))
+                    .map(loc => (
+                        <div key={loc.id} className="flex flex-row items-center gap-2">
 
-                        <input type="checkbox" id={loc.id.toString()} value={loc.id} onChange={(e) => onCheckboxChange(loc, e.target.checked)} className="appearance-none w-4 h-4 relative border rounded-sm hover:ring hover:cursor-pointer legacy:ring-zinc-600 legacy:checked:bg-zinc-400 legacy:border-zinc-600 viking:checked:bg-viking-red-200 viking:checked:border-viking-red-300 viking:ring-viking-red-300 viking:checked:ring-viking-red-300 viking:checked:border-2 viking:border-viking-beige-500 viking:bg-viking-beige-300 "/>
-                        <Button variant = "small" disabled={!loc.getIsInList(selectedLocs)} className="text-sm" onClick={() => sendLocation(loc)}>Send</Button>
+                            <input type="checkbox" id={loc.id.toString()} value={loc.id} onChange={(e) => onCheckboxChange(loc, e.target.checked)} className="appearance-none w-4 h-4 relative border rounded-sm hover:ring hover:cursor-pointer legacy:ring-zinc-600 legacy:checked:bg-zinc-400 legacy:border-zinc-600 viking:checked:bg-viking-red-200 viking:checked:border-viking-red-300 viking:ring-viking-red-300 viking:checked:ring-viking-red-300 viking:checked:border-2 viking:border-viking-beige-500 viking:bg-viking-beige-300 "/>
+                            <Button variant = "small" disabled={!loc.getIsInList(selectedLocs)} className="text-sm" onClick={() => sendLocation(loc)}>Send</Button>
 
 
-                        <div className="flex flex-col">
-                            <p className="font-normal">{loc.name}</p>
-                            <p className="text-sm mb-0.5 legacy:text-zinc-500 viking:text-viking-green-100">{loc.objective}</p>
+                            <div className="flex flex-col">
+                                <p className="font-normal">{loc.name}</p>
+                                <p className="text-sm mb-0.5 legacy:text-zinc-500 viking:text-viking-green-100">{loc.objective}</p>
+                            </div>
                         </div>
-                    </div>
-                ))}
-                {region!.locations.filter(loc => loc.getIsInList(checkedLocIds)).map(loc => (
-                    <div key={loc.id} className="flex flex-row items-center gap-2">
-                        <div className="flex flex-col legacy:opacity-70 italic viking:opacity-80">
-                            <p className="font-normal">{loc.name}</p>
-                            <p className="text-sm mb-0.5 legacy:text-zinc-500 viking:text-viking-green-100">{loc.objective}</p>
+                    ))
+                }
+                {region!.locations
+                    .filter(loc => loc.getIsInList(checkedLocIds))
+                    .sort((a, b) => Number(b.name.startsWith("Slay")) - Number(a.name.startsWith("Slay")))
+                    .map(loc => (
+                        <div key={loc.id} className="flex flex-row items-center gap-2">
+                            <div className="flex flex-col legacy:opacity-70 italic viking:opacity-80">
+                                <p className="font-normal">{loc.name}</p>
+                                <p className="text-sm mb-0.5 legacy:text-zinc-500 viking:text-viking-green-100">{loc.objective}</p>
+                            </div>
                         </div>
-                    </div>
-                ))}
+                    ))
+                }
             </div>
         </div>
     )
