@@ -5,28 +5,39 @@ export class ArchipelagoService {
 
     async connect(onDisconnected: () => void, onReceiveItems: (items: Item[]) => void, onReceiveMessage: (msg: string) => void, server: string, name: string, pass: string) {
 
-        //Create Listeners:
-        let messageListener = (content: string) => {
-            onReceiveMessage(content);
+        //Create function for Cleanup of Listeners
+        const cleanup = () => {
+            this.client.messages.off("message", messageListener)
+            this.client.items.off("itemsReceived", itemsListener)
+            this.client.socket.off("disconnected", disconnectedListener)
         };
-        let itemsListener = (content: Item[]) => {
-            onReceiveItems(content);
-        };
-        let disconnectedListener = () => {
-            onDisconnected();
 
-            this.client.messages.off("message", messageListener);
-            this.client.items.off("itemsReceived", itemsListener);
-            this.client.socket.off("disconnected", disconnectedListener);
+        //Create Listeners:
+        const messageListener = (content: string) => {
+            onReceiveMessage(content)
+        };
+        const itemsListener = (content: Item[]) => {
+            onReceiveItems(content)
+        };
+
+        const disconnectedListener = () => {
+            onDisconnected()
+            cleanup()
         };
 
         //Start Listeners:
-        this.client.messages.on("message", messageListener);
-        this.client.items.on("itemsReceived", itemsListener);
-        this.client.socket.on("disconnected", disconnectedListener)
+        this.client.messages.on("message", messageListener)
+        this.client.items.on("itemsReceived", itemsListener)
 
         //Login:
-        return await this.client.login(server, name, "Backlog Expedition", {slotData: true, password: pass})
+        try {
+            const result = await this.client.login(server, name, "Backlog Expedition", {slotData: true, password: pass})
+            this.client.socket.on("disconnected", disconnectedListener)
+            return result
+        } catch (error) {
+            cleanup()
+            throw error
+        }
     }
 
     public disconnect() {
@@ -43,6 +54,10 @@ export class ArchipelagoService {
 
     public sendMessage(msg: string) {
         this.client.messages.say(msg)
+    }
+
+    public sendGoal() {
+        this.client.goal()
     }
 
     public getLocationName(locId: number): string {
