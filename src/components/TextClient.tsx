@@ -23,7 +23,7 @@ export function TextClient() {
     return ( 
         <div className="flex flex-1 flex-col h-full pr-3 gap-4">
             <Title>Text Client</Title>
-            <label className='w-full p-2 flex flex-col min-h-100 max-h-100 scrollbar-thin scrollbar-gutter-auto viking:scrollbar-thumb-viking-beige-400 viking:scrollbar-track-viking-beige-100 overflow-auto viking:bg-viking-beige-300 viking:border viking:border-viking-beige-500 viking:text-viking-red-400'>
+            <label className='w-full p-2 flex flex-col min-h-100 max-h-100 scrollbar-thin scrollbar-gutter-auto overflow-auto border legacy:rounded-lg legacy:border-zinc-300 legacy:bg-zinc-100 legacy:text-zinc-700 viking:scrollbar-thumb-viking-beige-400 viking:scrollbar-track-viking-beige-100 viking:bg-viking-beige-300 viking:border-viking-beige-500 viking:text-viking-red-400'>
                 {textClient.map(line => (
                     <p key={crypto.randomUUID()}>{line}</p>
                 ))}
