@@ -25,9 +25,7 @@ export function SideNav({ children, onPageChange }: NavProps) {
 
           {(playerOptions.HintShopCost != 0) && <NavItem page="TrashExchange" onPageChange={onPageChange} active={children === "TrashExchange"} finished={false}>Trash Exchange</NavItem>}
 
-          {(treasurousRegions.length !== 0 || treasurelessRegions.length !== 0) &&
-            <NavItem page="Locations" onPageChange={onPageChange} active={children === "Locations"} finished={false}>Unplundered Locations</NavItem>
-          }
+          <NavItem page="Locations" onPageChange={onPageChange} active={children === "Locations"} finished={false}>Unplundered Locations</NavItem>
 
           {treasurousRegions.length !== 0 &&
             <div>
@@ -67,7 +65,6 @@ export function SideNav({ children, onPageChange }: NavProps) {
   )
 }
 
-//@CurrentSession.RegionHandler.AvailableRegions.OrderBy(r => r.LocationsLeft <= 0) for above^^
 
 type NavItemProps = {
   children: ReactNode,

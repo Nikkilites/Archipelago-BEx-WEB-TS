@@ -22,6 +22,10 @@ export function Locations() {
 
             <Title>Unplundered Locations</Title>
 
+            <div className="font-bold text-l mb-3 legacy:font-normal viking:text-viking-orange-300 opacity-80">
+                {locations.length == 0 && <h5>You have nothing left to plunder!</h5>}
+            </div>
+
             <div className="flex flex-col mt-3 gap-2">
                 {locations
                     .sort((a, b) => Number(b.name.startsWith("Slay")) - Number(a.name.startsWith("Slay")))
