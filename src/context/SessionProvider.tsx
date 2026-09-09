@@ -1,6 +1,7 @@
 import { useRef, useState, type ReactNode } from "react";
 import type { Item, JSONRecord } from "archipelago.js";
 
+import { useToast } from "./ToastContext";
 import { SessionContext } from "./SessionContext";
 import { ArchipelagoService } from "../archipelago/ArchipelagoService";
 
@@ -8,12 +9,16 @@ import { Region } from "../bex/model/Region";
 import { Location } from "../bex/model/Location";
 import { PlayerOptions } from "../bex/model/PlayerOptions";
 import { RegionData } from "../bex/data/RegionData";
+import { Notification } from "../bex/model/Notification";
+
 
 type SessionProviderProps = {
     children: ReactNode
 }
 
 export function SessionProvider({ children }: SessionProviderProps) {
+    const { openToast, setToasts } = useToast()
+
     const [activePage, setActivePage] = useState("Home")
     
     const [isActive, setActive] = useState<boolean>(false)
@@ -116,6 +121,7 @@ export function SessionProvider({ children }: SessionProviderProps) {
         setRegions([])
         setCheckedLocIds([])
         setTextClient([])
+        setToasts([])
     }
 
     function onReceiveItems(items: Item[]) {
@@ -124,6 +130,7 @@ export function SessionProvider({ children }: SessionProviderProps) {
 
             if (item.name.endsWith("Rune") && !item.name.startsWith("Broken")) {
                 setRunesAquired(curr => [...curr, item.name])
+                items.length <= 1 && openToast(new Notification("You have received a " + item.name, crypto.randomUUID(), false, "none"), 10000)
             }
             else {
                 setTrashAquired(curr => curr++)
@@ -150,11 +157,13 @@ export function SessionProvider({ children }: SessionProviderProps) {
         console.log("Location Sent: " + loc.name)
         apService.sendLocation(loc.id)
         setCheckedLocIds(curr => [...curr, loc.id])
+        openToast(new Notification(("You sent a " + loc.getScoutedItemString()), crypto.randomUUID(), true, loc.getScoutedItemType()))
     }
 
     function sendGoal() {
         console.log("Goal Sent!")
         apService.sendGoal()
+        openToast(new Notification(("You have goaled!"), crypto.randomUUID(), false, "none"))
     }
     
     return (

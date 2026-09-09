@@ -4,11 +4,14 @@ import App from './app/App.tsx'
 import './app/index.css'
 
 import { SessionProvider } from './context/SessionProvider.tsx'
+import { ToastProvider } from './context/ToastProvider.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <SessionProvider>
-      <App />
-    </SessionProvider>
+    <ToastProvider>
+      <SessionProvider>
+        <App />
+      </SessionProvider>
+    </ToastProvider>
   </StrictMode>,
 )
