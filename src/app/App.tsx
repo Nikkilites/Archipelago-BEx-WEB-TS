@@ -12,12 +12,23 @@ import { Island } from '../components/Island'
 import { Locations } from '../components/Locations'
 
 import { useLocalStorage } from '../hooks/useLocalStorage'
+import { useEffect } from 'react'
 
 
 export default function App() {
   const { isActive, activePage, setActivePage } = useSession()
 
   const [theme, setTheme] = useLocalStorage<string>("theme", "viking")
+
+  useEffect(() => {
+    document.documentElement.classList.remove(
+      "legacy",
+      "nordic",
+      "viking"
+    );
+
+    document.documentElement.classList.add(theme);
+  }, [theme]);
 
   function onThemeChange(theme: string) {
     setTheme(theme)
