@@ -21,6 +21,24 @@ export class Location {
   }
 
   public getScoutedItemString(): string {
-    return this.name + " for " + this.scoutedItem?.receiver.alias
+    return this.scoutedItem?.name + " to " + this.scoutedItem?.receiver.alias
+  }
+
+  public getScoutedItemType(): string {
+    if (this.scoutedItem?.progression) {
+      return "progression" 
+    }
+    else if (this.scoutedItem?.useful) {
+      return "useful" 
+    }
+    else if (this.scoutedItem?.trap) {
+      return "trap" 
+    }
+    else if (this.scoutedItem?.filler) {
+      return "filler" 
+    }
+    else {
+      return "none" 
+    }
   }
 }
