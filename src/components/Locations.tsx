@@ -4,6 +4,7 @@ import { Title } from './Title'
 import { useSession } from "../context/SessionContext"
 import { Button } from "./Buttons"
 import type { Location } from "../bex/model/Location"
+import { Checkbox } from "./Checkbox"
 
 export function Locations() {
     const { regions, checkedLocIds, sendLocation, playerOptions, runesAquired } = useSession()
@@ -28,9 +29,8 @@ export function Locations() {
                     .map(loc => (
                         <div key={loc.id} className="flex flex-row items-center gap-2">
 
-                            <input type="checkbox" id={loc.id.toString()} value={loc.id} onChange={(e) => onCheckboxChange(loc, e.target.checked)} className="appearance-none w-4 h-4 relative border rounded-sm hover:ring hover:cursor-pointer legacy:ring-zinc-600 legacy:checked:bg-zinc-400 legacy:border-zinc-600 viking:checked:bg-viking-red-200 viking:checked:border-viking-red-300 viking:ring-viking-red-300 viking:checked:ring-viking-red-300 viking:checked:border-2 viking:border-viking-beige-500 viking:bg-viking-beige-300 "/>
+                            <Checkbox id={loc.id.toString()} value={loc.id} onChange={(e) => onCheckboxChange(loc, e.target.checked)}></Checkbox>
                             <Button variant = "small" disabled={!loc.getIsInList(selectedLocs)} className="text-sm" onClick={() => sendLocation(loc)}>Send</Button>
-
 
                             <div className="flex flex-col">
                                 <p className="font-normal">{loc.name}</p>
