@@ -138,6 +138,25 @@ export function SessionProvider({ children }: SessionProviderProps) {
         }
     }
 
+    function onReceiveHint(hint: Hint) {
+        console.log("Hint received: " + hint.item.receiver.alias + "'s " + hint.item.name + " is at " + hint.item.locationName + " in " + hint.item.sender.alias + "'s world")
+        if (hint.item.receiver == apService.client.players.self) {
+            openToast(new Notification("Your " + hint.item.name + " is at " + hint.item.locationName + " in " + hint.item.sender.alias + "'s world", crypto.randomUUID(), false, "none"), 10000)
+        }
+        else {
+            openToast(new Notification(hint.item.receiver.alias + "'s " + hint.item.name + " is at your " + hint.item.locationName, crypto.randomUUID(), false, "none"), 10000)
+        }
+        setHints(curr => [...curr, hint])
+    }
+
+    function onHintsInitialized(hints: Hint[]) {
+        console.log("Initializing Hints")
+        setHints(hints)
+        for (let hint of hints) {
+            console.log(hint.item.receiver.alias + "'s " + hint.item.name + " is at " + hint.item.locationName + " in " + hint.item.sender.alias + "'s world")
+        }
+    }
+
     function onDisconnected() {
         console.log("Archipelago Disconnected")
         resetData()
