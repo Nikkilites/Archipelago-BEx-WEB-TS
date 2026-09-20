@@ -13,11 +13,11 @@ type LocationBoxProps = {
 
 export function LocationBox({ loc, disabled, onCheckboxChange }: LocationBoxProps) {
 
-  const { sendLocation, hints } = useSession()
+  const { sendLocation, hints, playerName } = useSession()
 
   const [showHint, setShowHint] = useState(false)
 
-  const relevantHint = hints.find(hint => hint.item.locationId == loc.id)
+  const relevantHint = hints.find(hint => hint.item.locationId == loc.id && hint.item.sender.name == playerName)
 
   return (
     <div className="flex flex-row items-center gap-2">
