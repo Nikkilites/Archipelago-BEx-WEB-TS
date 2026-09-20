@@ -1,15 +1,17 @@
-import { Client, Item } from "archipelago.js";
+import { Client, Hint, Item } from "archipelago.js";
 import type { PlayerLogin } from "./PlayerLogin";
 
 export class ArchipelagoService {
     client = new Client();
 
-    async connect(onDisconnected: () => void, onReceiveItems: (items: Item[]) => void, onReceiveMessage: (msg: string) => void, login: PlayerLogin) {
+    async connect(onDisconnected: () => void, onReceiveItems: (items: Item[]) => void, onReceiveHint: (hint: Hint) => void, onHintsInitialized: (hint: Hint[]) => void, onReceiveMessage: (msg: string) => void, login: PlayerLogin) {
 
         //Create function for Cleanup of Listeners
         const cleanup = () => {
             this.client.messages.off("message", messageListener)
             this.client.items.off("itemsReceived", itemsListener)
+            this.client.items.off("hintReceived", hintListener)
+            this.client.items.off("hintsInitialized", hintInitListener)
             this.client.socket.off("disconnected", disconnectedListener)
         };
 
@@ -22,6 +24,14 @@ export class ArchipelagoService {
             onReceiveItems(content)
         };
 
+        const hintListener = (content: Hint) => {
+            onReceiveHint(content)
+        };
+
+        const hintInitListener = (content: Hint[]) => {
+            onHintsInitialized(content)
+        };
+
         const disconnectedListener = () => {
             onDisconnected()
             cleanup()
@@ -30,6 +40,8 @@ export class ArchipelagoService {
         //Start Listeners:
         this.client.messages.on("message", messageListener)
         this.client.items.on("itemsReceived", itemsListener)
+        this.client.items.on("hintReceived", hintListener)
+        this.client.items.on("hintsInitialized", hintInitListener)
 
         //Login:
         try {

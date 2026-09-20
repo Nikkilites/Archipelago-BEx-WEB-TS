@@ -1,5 +1,5 @@
 import { useRef, useState, type ReactNode } from "react";
-import type { Item, JSONRecord } from "archipelago.js";
+import type { Item, Hint, JSONRecord } from "archipelago.js";
 
 import { useToast } from "./ToastContext";
 import { SessionContext } from "./SessionContext";
@@ -30,6 +30,7 @@ export function SessionProvider({ children }: SessionProviderProps) {
     const [regions, setRegions] = useState<Region[]>([])
     const [checkedLocIds, setCheckedLocIds] = useState<number[]>([])
     const [textClient, setTextClient] = useState<string[]>([])
+    const [hints, setHints] = useState<Hint[]>([])
     
     let apService = useRef(new ArchipelagoService()).current;
 
@@ -38,7 +39,7 @@ export function SessionProvider({ children }: SessionProviderProps) {
         console.log("Try connect with Server: " + login.server + " | Name: " + login.name + " | Password: " + login.pass)
 
         try {
-            let value = await apService.connect(onDisconnected, onReceiveItems, onReceiveMessage, login)
+            let value = await apService.connect(onDisconnected, onReceiveItems, onReceiveHint, onHintsInitialized, onReceiveMessage, login)
 
             console.log("Connected to the Archipelago server!")
 
@@ -198,6 +199,7 @@ export function SessionProvider({ children }: SessionProviderProps) {
                 runesAquired: runesAquired,
                 trashAquired: trashAquired,
                 activePage: activePage,
+                hints: hints,
                 setActivePage: setActivePage,
                 connectAndProcess: connectAndProcess, 
                 disconnect: disconnect,
