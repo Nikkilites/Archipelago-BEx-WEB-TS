@@ -1,17 +1,16 @@
 import { useState, type ReactNode } from "react"
 
 import { Title } from './Title'
+import { LocationBox } from "./LocationBox"
 import { useSession } from "../context/SessionContext"
-import { Button } from "./Buttons"
 import type { Location } from "../bex/model/Location"
-import { Checkbox } from "./Checkbox"
 
 type IslandProps = {
   children: ReactNode
 }
 
 export function Island({ children }: IslandProps) {
-    const { regions, checkedLocIds, sendLocation } = useSession()
+    const { regions, checkedLocIds } = useSession()
 
     const [selectedLocs, setSelectedLocs] = useState<number[]>([]);
 
@@ -39,17 +38,7 @@ export function Island({ children }: IslandProps) {
                     .filter(loc => !loc.getIsInList(checkedLocIds))
                     .sort((a, b) => Number(b.name.startsWith("Slay")) - Number(a.name.startsWith("Slay")))
                     .map(loc => (
-                        <div key={loc.id} className="flex flex-row items-center gap-2">
-
-                            <Checkbox id={loc.id.toString()} value={loc.id} onChange={(e) => onCheckboxChange(loc, e.target.checked)}></Checkbox>
-                            <Button variant = "small" disabled={!loc.getIsInList(selectedLocs)} className="text-sm" onClick={() => sendLocation(loc)}>Send</Button>
-
-
-                            <div className="flex flex-col">
-                                <p className="font-normal">{loc.name}</p>
-                                <p className="text-sm mb-0.5 legacy:text-zinc-500 viking:text-viking-green-100">{loc.objective}</p>
-                            </div>
-                        </div>
+                        <LocationBox key={loc.id} loc={loc} disabled={!loc.getIsInList(selectedLocs)} onCheckboxChange={onCheckboxChange}></LocationBox>
                     ))
                 }
                 {region!.locations

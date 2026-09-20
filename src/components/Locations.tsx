@@ -2,12 +2,11 @@ import { useState } from "react"
 
 import { Title } from './Title'
 import { useSession } from "../context/SessionContext"
-import { Button } from "./Buttons"
 import type { Location } from "../bex/model/Location"
-import { Checkbox } from "./Checkbox"
+import { LocationBox } from "./LocationBox"
 
 export function Locations() {
-    const { regions, checkedLocIds, sendLocation, playerOptions, runesAquired } = useSession()
+    const { regions, checkedLocIds, playerOptions, runesAquired } = useSession()
 
     const [selectedLocs, setSelectedLocs] = useState<number[]>([]);
 
@@ -22,7 +21,7 @@ export function Locations() {
 
             <Title>Unplundered Locations</Title>
 
-            <div className="font-bold text-l mb-3 legacy:font-normal viking:text-viking-orange-300 opacity-80">
+            <div className="font-bold text-l legacy:font-normal viking:text-viking-orange-300 opacity-80">
                 {locations.length == 0 && <h5>You have nothing left to plunder!</h5>}
             </div>
 
@@ -31,16 +30,7 @@ export function Locations() {
                     .sort((a, b) => Number(b.name.startsWith("Slay")) - Number(a.name.startsWith("Slay")))
                     .sort((a, b) => a.objective.localeCompare(b.objective))
                     .map(loc => (
-                        <div key={loc.id} className="flex flex-row items-center gap-2">
-
-                            <Checkbox id={loc.id.toString()} value={loc.id} onChange={(e) => onCheckboxChange(loc, e.target.checked)}></Checkbox>
-                            <Button variant = "small" disabled={!loc.getIsInList(selectedLocs)} className="text-sm" onClick={() => sendLocation(loc)}>Send</Button>
-
-                            <div className="flex flex-col">
-                                <p className="font-normal">{loc.name}</p>
-                                <p className="text-sm mb-0.5 legacy:text-zinc-500 viking:text-viking-green-100">{loc.objective}</p>
-                            </div>
-                        </div>
+                        <LocationBox key={loc.id} loc={loc} disabled={!loc.getIsInList(selectedLocs)} onCheckboxChange={onCheckboxChange}></LocationBox>
                     ))
                 }
             </div>
