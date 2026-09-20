@@ -5,6 +5,7 @@ import type { PlayerOptions } from "../bex/model/PlayerOptions"
 import type { Location } from "../bex/model/Location"
 
 import type { ArchipelagoService } from "../archipelago/ArchipelagoService"
+import type { PlayerLogin } from "../archipelago/PlayerLogin"
 
 
 type Context = {
@@ -25,7 +26,7 @@ type Context = {
 
   activePage: string
 
-  connectAndProcess: (server: string, name: string, pass: string) => Promise<boolean>
+  connectAndProcess: (login: PlayerLogin) => Promise<boolean>
   disconnect: () => void
   sendMessage: (msg: string) => void
   sendLocation: (loc: Location) => void

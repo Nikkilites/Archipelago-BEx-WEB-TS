@@ -10,6 +10,7 @@ import { Location } from "../bex/model/Location";
 import { PlayerOptions } from "../bex/model/PlayerOptions";
 import { RegionData } from "../bex/data/RegionData";
 import { Notification } from "../bex/model/Notification";
+import type { PlayerLogin } from "../archipelago/PlayerLogin";
 
 
 type SessionProviderProps = {
@@ -33,17 +34,17 @@ export function SessionProvider({ children }: SessionProviderProps) {
     let apService = useRef(new ArchipelagoService()).current;
 
     //Create all controller functions here
-    async function connectAndProcess(server: string, name: string, pass: string) {
-        console.log("Try connect with Server: " + server + " | Name: " + name + " | Password: " + pass)
+    async function connectAndProcess(login: PlayerLogin) {
+        console.log("Try connect with Server: " + login.server + " | Name: " + login.name + " | Password: " + login.pass)
 
         try {
-            let value = await apService.connect(onDisconnected, onReceiveItems, onReceiveMessage, server, name, pass)
+            let value = await apService.connect(onDisconnected, onReceiveItems, onReceiveMessage, login)
 
             console.log("Connected to the Archipelago server!")
 
             setCheckedLocIds(apService.getCheckedLocationIds())
 
-            setPlayerName(name)
+            setPlayerName(login.name)
 
             await SetupSlot(value)
 

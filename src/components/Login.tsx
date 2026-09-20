@@ -5,6 +5,8 @@ import { InputField } from '../components/InputField'
 
 import { useLocalStorage } from "../hooks/useLocalStorage"
 import { useSession } from "../context/SessionContext"
+import type { PlayerLogin } from "../archipelago/PlayerLogin"
+import { twMerge } from "tailwind-merge"
 
 export function LoginForm() {
     const { connectAndProcess } = useSession()
@@ -12,10 +14,14 @@ export function LoginForm() {
     const [error, setError] = useState("")
     const [connecting, setConnecting] = useState(false)
 
+    const [collapsed, setcollapsed] = useLocalStorage<boolean>("collapsedPreviousConnections", true)
+
     const [server, setServer] = useLocalStorage<string>("server", "")
     const [name, setName] = useLocalStorage<string>("name", "")
     const [pass, setPass] = useLocalStorage<string>("pass", "")
 
+    const [logins, setLogins] = useLocalStorage<PlayerLogin[]>("playerLogins", [])
+    
     async function submitLogin(e: SubmitEvent) {
         e.preventDefault()
 
@@ -23,13 +29,29 @@ export function LoginForm() {
 
         setConnecting(true)
 
-        let result = await connectAndProcess(server, name, pass)
+        const login: PlayerLogin = {server: server, name: name, pass: pass, id: (name + "@" + server)}
+        removeLogin(login.id)
+        setLogins(curr => [...curr, login])
+
+        let result = await connectAndProcess(login)
 
         if (!result) {
             setError("Connection failed. Please refresh the room, check your login info and the room data, then try again.")
+            removeLogin(login.id)
         }
 
         setConnecting(false)
+    }
+
+    function fillLogin(login: PlayerLogin) {
+        setServer(login.server)
+        setName(login.name)
+        setPass(login.pass)
+    }
+
+    function removeLogin(id: string) {
+        console.log("Removing login: " + id)
+        setLogins(curr => curr.filter(login => login.id !== id))
     }
 
     return (
@@ -71,15 +93,37 @@ export function LoginForm() {
                             </svg>}
                             {connecting ? "Connecting..." : "Login & Connect"}
                         </Button>
+                        <div className="legacy:text-zinc-500 viking:text-viking-green-100">
+                            <button type="button" onClick={() => setcollapsed(curr => !curr)} className="flex-1 w-full hover:cursor-pointer">
+                                <div className="flex w-full justify-between">
+                                    <p className="text-sm text-left">Previous Connections</p>
+                                    <svg className={twMerge("w-5 h-5", collapsed ? "" : "rotate-180")} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 9-7 7-7-7"/></svg>
+                                </div>
+                                <div className="border-t legacy:border-t-zinc-500 viking:border-t-viking-green-100"></div>
+                            </button>
+                            <div className="flex flex-col gap-1 mt-1">
+                                {!collapsed && !connecting && [...logins].reverse().map(login => (
+                                    <div key={login.id} className="p-1 flex w-full justify-between gap-5 text-sm legacy:pl-3 legacy:rounded-2xl legacy:hover:bg-legacy-blue-200 legacy:bg-legacy-blue-150 viking:rounded-sm viking:pl-2 viking:hover:bg-viking-green-700 viking:hover:ring viking:hover:ring-viking-red-300">                           
+                                        <button type="button" onClick={() => fillLogin(login)} className="flex-1 hover:cursor-pointer">
+                                            <p className="text-sm text-left">{login.id}</p>
+                                        </button>
+                                        <button type="button" onClick={() => removeLogin(login.id)} className="hover:cursor-pointer">
+                                            <svg className="legacy:w-6 legacy:h-6 border-l pl-1 legacy:pr-1 legacy:border-zinc-400 viking:w-5 viking:h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18 17.94 6M18 18 6.06 6"/></svg>
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
 
             {error !== "" && 
-                <div className='mb-3 legacy:bg-legacy-red-100 legacy:rounded-lg border legacy:border-legacy-red-200 viking:border-viking-red-200 viking:text-viking-red-100 viking:bg-viking-beige-200'>
+                <div className='legacy:bg-legacy-red-100 legacy:rounded-lg border legacy:border-legacy-red-200 viking:border-viking-red-200 viking:text-viking-red-100 viking:bg-viking-beige-200'>
                     <label className='p-5 flex text-center legacy:text-legacy-red-400'>{error}</label>
                 </div>
             }
+            <div className='mb-5'></div>
         </div>
     )
 }

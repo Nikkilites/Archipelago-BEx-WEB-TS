@@ -1,9 +1,10 @@
 import { Client, Item } from "archipelago.js";
+import type { PlayerLogin } from "./PlayerLogin";
 
 export class ArchipelagoService {
     client = new Client();
 
-    async connect(onDisconnected: () => void, onReceiveItems: (items: Item[]) => void, onReceiveMessage: (msg: string) => void, server: string, name: string, pass: string) {
+    async connect(onDisconnected: () => void, onReceiveItems: (items: Item[]) => void, onReceiveMessage: (msg: string) => void, login: PlayerLogin) {
 
         //Create function for Cleanup of Listeners
         const cleanup = () => {
@@ -16,6 +17,7 @@ export class ArchipelagoService {
         const messageListener = (content: string) => {
             onReceiveMessage(content)
         };
+
         const itemsListener = (content: Item[]) => {
             onReceiveItems(content)
         };
@@ -31,7 +33,7 @@ export class ArchipelagoService {
 
         //Login:
         try {
-            const result = await this.client.login(server, name, "Backlog Expedition", {slotData: true, password: pass})
+            const result = await this.client.login(login.server, login.name, "Backlog Expedition", {slotData: true, password: login.pass})
             this.client.socket.on("disconnected", disconnectedListener)
             return result
         } catch (error) {
