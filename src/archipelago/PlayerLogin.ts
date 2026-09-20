@@ -1,0 +1,1 @@
+export type PlayerLogin = { server: string; name: string; pass: string; id: string }
