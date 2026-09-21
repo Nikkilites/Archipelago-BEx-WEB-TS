@@ -17,6 +17,8 @@ type Context = {
 
   runesAquired: string[]
   trashAquired: number
+  trashSpent: number
+  trashCost: number
 
   textClient: string[]
 
@@ -34,6 +36,7 @@ type Context = {
   sendMessage: (msg: string) => void
   sendLocation: (loc: Location) => void
   sendGoal: () => void
+  sendHint: () => void
   setActivePage: (page: string) => void
 }
 

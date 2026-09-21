@@ -26,7 +26,12 @@ export function SessionProvider({ children }: SessionProviderProps) {
     const [playerName, setPlayerName] = useState<string>("name")
     const [playerOptions, setPlayerOptions] = useState<PlayerOptions>(new PlayerOptions(0,0,0))
     const [runesAquired, setRunesAquired] = useState<string[]>([])
+
+    const [trashDataStorageKey, setTrashDataStorageKey] = useState<string>("")
     const [trashAquired, setTrashAquired] = useState<number>(0)
+    const [trashSpent, setTrashSpent] = useState<number>(0)
+    const [trashCost, setTrashCost] = useState<number>(0)
+
     const [regions, setRegions] = useState<Region[]>([])
     const [checkedLocIds, setCheckedLocIds] = useState<number[]>([])
     const [textClient, setTextClient] = useState<string[]>([])
@@ -46,6 +51,10 @@ export function SessionProvider({ children }: SessionProviderProps) {
             setCheckedLocIds(apService.getCheckedLocationIds())
 
             setPlayerName(login.name)
+
+            const tmpTrashDataStorageKey = "BEx_slot:" + apService.client.players.self.slot + "_" + login.name + ":trash_used"
+            setTrashDataStorageKey(tmpTrashDataStorageKey)
+            setTrashSpent(Number(await apService.getServerDataStorage(tmpTrashDataStorageKey)))
 
             await SetupSlot(value)
 
@@ -67,7 +76,14 @@ export function SessionProvider({ children }: SessionProviderProps) {
         let runesReq = "runes_required" in slotData ? slotData["runes_required"] as number : 1
 
         setPlayerOptions(new PlayerOptions(treasuresToGoal, runesReq, hintShopCost))
-        await createRegions(slotData["hint_data"] as JSONRecord)
+        const allRegions = await createRegions(slotData["hint_data"] as JSONRecord) as Region[]
+
+        setRegions(allRegions)
+
+        const trashInWorld = allRegions.flatMap(reg => reg.locations).length - ((allRegions.length -1) * runesReq); 
+        const tmpTrashCost = Math.round(trashInWorld * (hintShopCost/100))
+
+        setTrashCost((tmpTrashCost <= 1) ? 1 : tmpTrashCost)
     }
 
     async function createRegions(objectives: JSONRecord) {
@@ -100,7 +116,7 @@ export function SessionProvider({ children }: SessionProviderProps) {
                 allRegions = allRegions.concat(new Region(name, treasure, regionLocs))
             }
 
-            setRegions(allRegions)
+            return allRegions
 
         } catch (error) {
             console.log(error)
@@ -133,10 +149,10 @@ export function SessionProvider({ children }: SessionProviderProps) {
 
             if (item.name.endsWith("Rune") && !item.name.startsWith("Broken")) {
                 setRunesAquired(curr => [...curr, item.name])
-                items.length <= 1 && openToast(new Notification("You have received a " + item.name, crypto.randomUUID(), false, "none"), 10000)
+                isActive && openToast(new Notification("You have received a " + item.name, crypto.randomUUID(), false, "none"), 10000)
             }
             else {
-                setTrashAquired(curr => curr++)
+                setTrashAquired(curr => curr + 1)
             }
         }
     }
@@ -188,6 +204,35 @@ export function SessionProvider({ children }: SessionProviderProps) {
         openToast(new Notification(("You have goaled!"), crypto.randomUUID(), false, "none"))
     }
     
+    function sendHint() {        
+        const trashAvailable = trashAquired - trashSpent
+
+        if (trashAvailable < trashCost) {
+            openToast(new Notification(("You do not have enough trash to pay for this hint!"), crypto.randomUUID(), false, "none"))
+            console.log("Player didn't have enough available trash to hint")
+        }
+        else {
+            const locIdsWithHint = hints.filter(hint => hint.item.sender.name == playerName).flatMap(hint => hint.item.locationId)
+            const availableLocations = regions.flatMap(reg => reg.locations).filter(loc => !loc.getIsInList(checkedLocIds) && !loc.getIsInList(locIdsWithHint))
+            if (availableLocations.length <= 0) {
+                openToast(new Notification(("You have no unhinted locations to hint!"), crypto.randomUUID(), false, "none"))
+                console.log("Player had no unhinted locations to hint")
+            }
+            else {
+                const rndLocation = availableLocations[Math.floor(Math.random() * availableLocations.length)];
+
+                console.log("Player sent location hint for location with id: " + rndLocation.id + " to server");
+                apService.sendLocationHint(rndLocation.id)
+
+                console.log("Updating Trash Spent")
+                setTrashSpent(trashSpent + trashCost)
+                apService.updateServerDataStorage(trashDataStorageKey, (trashSpent + trashCost).toString())
+
+                openToast(new Notification(("Hint was purchased!"), crypto.randomUUID(), false, "none"))
+            }
+        }
+    }
+
     return (
         <SessionContext value={{ 
                 textClient: textClient, 
@@ -199,8 +244,11 @@ export function SessionProvider({ children }: SessionProviderProps) {
                 playerOptions: playerOptions, 
                 runesAquired: runesAquired,
                 trashAquired: trashAquired,
+                trashSpent: trashSpent,
+                trashCost:trashCost,
                 activePage: activePage,
                 hints: hints,
+                sendHint: sendHint,
                 setActivePage: setActivePage,
                 connectAndProcess: connectAndProcess, 
                 disconnect: disconnect,

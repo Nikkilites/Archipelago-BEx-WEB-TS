@@ -1,4 +1,4 @@
-import { Client, Hint, Item } from "archipelago.js";
+import { Client, Hint, Item, type JSONSerializable } from "archipelago.js";
 import type { PlayerLogin } from "./PlayerLogin";
 
 export class ArchipelagoService {
@@ -88,5 +88,14 @@ export class ArchipelagoService {
 
     async scoutLocations(locIds: number[]) {
         return await this.client.scout(locIds,0)
+    }
+
+    async getServerDataStorage(key: string) {
+        return await this.client.storage.fetch(key)
+    }
+
+    public updateServerDataStorage(key: string, value: JSONSerializable) {
+        console.log("Update Server Data Storage " + key + " to " + value)
+        return this.client.storage.prepare(key, 0).replace(value).commit()
     }
 }
