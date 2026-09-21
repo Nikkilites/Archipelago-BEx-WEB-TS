@@ -64,8 +64,9 @@ export function SessionProvider({ children }: SessionProviderProps) {
         console.log("Setup Slot")
         let treasuresToGoal = ("treasures_to_goal" in slotData ? slotData["treasures_to_goal"] : slotData["beaten_to_goal"]) as number
         let hintShopCost = "hint_shop_cost" in slotData ? slotData["hint_shop_cost"] as number : 20
+        let runesReq = "runes_required" in slotData ? slotData["runes_required"] as number : 1
 
-        setPlayerOptions(new PlayerOptions(treasuresToGoal, slotData["runes_required"] as number, hintShopCost))
+        setPlayerOptions(new PlayerOptions(treasuresToGoal, runesReq, hintShopCost))
         await createRegions(slotData["hint_data"] as JSONRecord)
     }
 
