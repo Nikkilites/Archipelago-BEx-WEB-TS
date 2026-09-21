@@ -1,9 +1,11 @@
 import { useState } from "react"
 
 import { Title } from './Title'
+import { SubTitle } from "./SubTitle"
+import { LocationBox } from "./LocationBox"
+
 import { useSession } from "../context/SessionContext"
 import type { Location } from "../bex/model/Location"
-import { LocationBox } from "./LocationBox"
 
 export function Locations() {
     const { regions, checkedLocIds, playerOptions, runesAquired } = useSession()
@@ -21,9 +23,7 @@ export function Locations() {
 
             <Title>Unplundered Locations</Title>
 
-            <div className="font-bold text-l legacy:font-normal viking:text-viking-orange-300 opacity-80">
-                {locations.length == 0 && <h5>You have nothing left to plunder!</h5>}
-            </div>
+            <SubTitle>{locations.length == 0 && <h5>You have nothing left to plunder!</h5>}</SubTitle>
 
             <div className="flex flex-col mt-3 gap-2">
                 {locations

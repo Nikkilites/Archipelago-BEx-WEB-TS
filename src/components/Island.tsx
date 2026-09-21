@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from "react"
 
 import { Title } from './Title'
+import { SubTitle } from "./SubTitle"
 import { LocationBox } from "./LocationBox"
 import { useSession } from "../context/SessionContext"
 import type { Location } from "../bex/model/Location"
@@ -25,13 +26,11 @@ export function Island({ children }: IslandProps) {
 
             <Title>{children}</Title>
 
-            <div className="font-bold text-l mb-3 legacy:font-normal viking:text-viking-orange-300 opacity-80">
-                {region?.getIsFinished(checkedLocIds) 
+            <SubTitle>{region?.getIsFinished(checkedLocIds) 
                     ? <h5>This island has been fully raided!</h5> 
                     : (region?.getTreasureFound(checkedLocIds) && <h5>You have found the treasure on this island!</h5>)
                 }
-            </div>
-
+            </SubTitle>
 
             <div className="flex flex-col gap-2">
                 {region!.locations
