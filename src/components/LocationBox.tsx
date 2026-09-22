@@ -30,7 +30,7 @@ export function LocationBox({ loc, disabled, onCheckboxChange }: LocationBoxProp
             <p className="font-normal">{loc.name}</p>
             {relevantHint !== undefined &&
                 <button type="button" onClick={() => setShowHint(curr => !curr)} className={twMerge(
-                    "min-w-4 h-4 text-xs legacy:mb-0.5 border rounded-2xl legacy:border-zinc-800 legacy:text-zinc-700 viking:border-viking-green-700 hover:cursor-pointer",
+                    "min-w-5 h-5 text-xs legacy:mb-0.5 border rounded-2xl legacy:border-zinc-800 legacy:text-zinc-700 viking:border-viking-green-700 hover:cursor-pointer",
                     showHint ? "px-2" : "",
                     getVariantStyles(
                       relevantHint.item.progression ? "progression" : (

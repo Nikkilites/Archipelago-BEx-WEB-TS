@@ -12,7 +12,8 @@ import { Island } from '../components/Island'
 import { Locations } from '../components/Locations'
 
 import { useLocalStorage } from '../hooks/useLocalStorage'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { twMerge } from 'tailwind-merge'
 
 
 export default function App() {
@@ -61,10 +62,24 @@ type PageProps = {
 
 function ConnectedPage({ page, onPageChange }: PageProps) {
 
+  const [navDrawerActive, setNavDrawerActive] = useState(true)
+
+    function onPageChangeWNavDrawer(page: string) {
+      onPageChange(page)
+      setNavDrawerActive(false)
+    }
+
   return (
-    <div className='flex flex-1 w-full gap-4 pl-4 viking:pl-0'>
-      <SideNav onPageChange={onPageChange}>{page}</SideNav>
-      <div className='viking:p-4 flex-1 flex grow'>
+    <div className='flex flex-1 w-full gap-4 viking:pl-0'>
+      <div className='flex'>
+        <SideNav navActive={navDrawerActive} onPageChange={onPageChangeWNavDrawer}>{page}</SideNav>
+        <div>
+          <button type="button" onClick={() => setNavDrawerActive(curr => !curr)} className='absolute block md:hidden legacy:border-r legacy:border-t legacy:border-b legacy:bg-legacy-blue-100 legacy:rounded-r-lg legacy:border-legacy-blue-200 nordic:bg-nordic-red-500 nordic:border-4 nordic:border-nordic-red-400 viking:bg-viking-green-600 viking:text-viking-beige-400 viking:rounded-r-lg'>
+            <svg className={twMerge("w-7 h-7", navDrawerActive ? "rotate-90" : "rotate-270")} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m19 9-7 7-7-7"/></svg>
+          </button>
+        </div>
+      </div>
+      <div className={twMerge("viking:p-2 md:viking:p-4 flex-1 flex grow", navDrawerActive ? "hidden md:flex" : "")}>
         {
           {
             'Home': <Home/>,
@@ -112,7 +127,7 @@ type FooterProps = {
 
 function Footer({ onThemeChange }: FooterProps) {
   return (
-    <div className="pl-6 pr-6 p-3 flex flex-col legacy:bg-gray-100 legacy:border-t legacy:border-t-zinc-300 nordic:bg-nordic-grey-700 viking:bg-viking-red-300">
+    <div className="flex flex-col text-sm text-center p-2 md:text-base md:pl-6 md:pr-6 md:p-3  legacy:bg-gray-100 legacy:border-t legacy:border-t-zinc-300 nordic:bg-nordic-grey-700 viking:bg-viking-red-300">
       <footer className="grid grid-cols-3 viking:text-viking-beige-300">
         <ThemeSwitch onThemeChange={onThemeChange}/>
         <span className='mx-auto'>BEx Version 4.0</span>

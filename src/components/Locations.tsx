@@ -25,7 +25,7 @@ export function Locations() {
 
             <SubTitle>{locations.length == 0 && <h5>You have nothing left to plunder!</h5>}</SubTitle>
 
-            <div className="flex flex-col mt-3 gap-2">
+            <div className="flex flex-col gap-2">
                 {locations
                     .sort((a, b) => Number(b.name.startsWith("Slay")) - Number(a.name.startsWith("Slay")))
                     .sort((a, b) => a.objective.localeCompare(b.objective))
