@@ -33,7 +33,7 @@ export function ToastProvider({ children }: ToastProviderProps) {
                 onToastCopied: onToastCopied,
             }}>
             {children}
-            <div className="fixed legacy:top-30 viking:top-35 right-3 flex flex-col gap-1">
+            <div className="fixed legacy:top-30 viking:top-43 md:legacy:top-23 md:viking:top-28 right-3 flex flex-col gap-1">
                 {toasts.map(notif => (
                     <Toast key={notif.id} notif={notif}></Toast>
                 ))}
