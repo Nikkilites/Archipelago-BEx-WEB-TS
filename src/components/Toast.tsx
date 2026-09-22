@@ -14,16 +14,16 @@ export function Toast({ notif }: ToastProps) {
             
                 <div className={twMerge(
                         "inline-flex items-center justify-center shrink-0 w-6 h-6 rounded-2xl border legacy:border-zinc-800 viking:border-viking-red-400 ",
-                        getVariantStyles(notif.usefulness)
+                        getDotColorStyles(notif.dotColor)
                     )}>
-                    {notif.usefulness != "none" && 
+                    {notif.dotSymbol == "check" && 
                         <div>
                             <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 11.917 9.724 16.5 19 7.5"/></svg>
                             <span className="sr-only">Check icon</span>
                         </div>
                     }
-                    {notif.usefulness == "none" && 
-                        <label className="w-5 h-5 items-center text-center justify-center mb-1">!</label>
+                    {notif.dotSymbol != "check" && 
+                        <label className="w-5 h-5 items-center text-center justify-center mb-1">{notif.dotSymbol}</label>
                     }
                 </div>
             <div className="text-sm font-normal">{notif.name}</div>
@@ -45,8 +45,8 @@ export function Toast({ notif }: ToastProps) {
     )
 }
 
-function getVariantStyles(variant: string) {
-  switch (variant) {
+function getDotColorStyles(dotColor: string) {
+  switch (dotColor) {
     case "progression":
       return "bg-archi-prog "
     case "useful":
@@ -55,6 +55,8 @@ function getVariantStyles(variant: string) {
       return "bg-archi-trash "
     case "trap":
       return "bg-archi-trap "
+    case "warning":
+      return "viking:bg-viking-red-200 viking:text-viking-beige-200 legacy:text-legacy-red-400 legacy:bg-legacy-red-200 "
     default:
       return "viking:bg-viking-beige-300 legacy:bg-legacy-blue-200 "
   }

@@ -2,13 +2,17 @@ export class Notification {
   name: string;
   id: string;
   useCopyButton: boolean;
-  usefulness: string;
+  dotSymbol: string;
+  dotColor: string;
+  notifStyle: string;
 
-  public constructor(name: string, id: string, useCopyButton: boolean, usefulness: string)
+  public constructor(name: string, dotColor: string = "default", dotSymbol: string = "check", useCopyButton: boolean = false, notifStyle: string = "default")
   {
     this.name = name;
-    this.id = id;
+    this.id = crypto.randomUUID();
     this.useCopyButton = useCopyButton;
-    this.usefulness = usefulness;
+    this.dotColor = dotColor;
+    this.dotSymbol = dotSymbol;
+    this.notifStyle = notifStyle;
   }
 }

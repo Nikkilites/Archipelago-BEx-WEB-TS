@@ -149,7 +149,7 @@ export function SessionProvider({ children }: SessionProviderProps) {
 
             if (item.name.endsWith("Rune") && !item.name.startsWith("Broken")) {
                 setRunesAquired(curr => [...curr, item.name])
-                isActive && openToast(new Notification("You have received a " + item.name, crypto.randomUUID(), false, "none"), 10000)
+                isActive && openToast(new Notification("You have received a " + item.name, "default", "!"), 10000)
             }
             else {
                 setTrashAquired(curr => curr + 1)
@@ -160,10 +160,10 @@ export function SessionProvider({ children }: SessionProviderProps) {
     function onReceiveHint(hint: Hint) {
         console.log("Hint received: " + hint.item.receiver.alias + "'s " + hint.item.name + " is at " + hint.item.locationName + " in " + hint.item.sender.alias + "'s world")
         if (hint.item.receiver == apService.client.players.self) {
-            openToast(new Notification("Your " + hint.item.name + " is at " + hint.item.locationName + " in " + hint.item.sender.alias + "'s world", crypto.randomUUID(), false, "none"), 10000)
+            openToast(new Notification("Your " + hint.item.name + " is at " + hint.item.locationName + " in " + hint.item.sender.alias + "'s world", "default", "!", true), 10000)
         }
         else {
-            openToast(new Notification(hint.item.receiver.alias + "'s " + hint.item.name + " is at your " + hint.item.locationName, crypto.randomUUID(), false, "none"), 10000)
+            openToast(new Notification(hint.item.receiver.alias + "'s " + hint.item.name + " is at your " + hint.item.locationName, "default", "!"), 10000)
         }
         setHints(curr => [...curr, hint])
     }
@@ -195,27 +195,27 @@ export function SessionProvider({ children }: SessionProviderProps) {
         console.log("Location Sent: " + loc.name)
         apService.sendLocation(loc.id)
         setCheckedLocIds(curr => [...curr, loc.id])
-        openToast(new Notification(("You sent a " + loc.getScoutedItemString()), crypto.randomUUID(), true, loc.getScoutedItemType()))
+        openToast(new Notification(("You sent a " + loc.getScoutedItemString()), loc.getScoutedItemType(), "check", true))
     }
 
     function sendGoal() {
         console.log("Goal Sent!")
         apService.sendGoal()
-        openToast(new Notification(("You have goaled!"), crypto.randomUUID(), false, "none"))
+        openToast(new Notification("You have goaled!", "default", "check", false, "highlighted"))
     }
     
     function sendHint() {        
         const trashAvailable = trashAquired - trashSpent
 
         if (trashAvailable < trashCost) {
-            openToast(new Notification(("You do not have enough trash to pay for this hint!"), crypto.randomUUID(), false, "none"))
+            openToast(new Notification("You do not have enough trash to pay for this hint!", "warning", "!", false))
             console.log("Player didn't have enough available trash to hint")
         }
         else {
             const locIdsWithHint = hints.filter(hint => hint.item.sender.name == playerName).flatMap(hint => hint.item.locationId)
             const availableLocations = regions.flatMap(reg => reg.locations).filter(loc => !loc.getIsInList(checkedLocIds) && !loc.getIsInList(locIdsWithHint))
             if (availableLocations.length <= 0) {
-                openToast(new Notification(("You have no unhinted locations to hint!"), crypto.randomUUID(), false, "none"))
+                openToast(new Notification("You have no unhinted locations to hint!", "warning", "!", false))
                 console.log("Player had no unhinted locations to hint")
             }
             else {
@@ -228,7 +228,7 @@ export function SessionProvider({ children }: SessionProviderProps) {
                 setTrashSpent(trashSpent + trashCost)
                 apService.updateServerDataStorage(trashDataStorageKey, (trashSpent + trashCost).toString())
 
-                openToast(new Notification(("Hint was purchased!"), crypto.randomUUID(), false, "none"))
+                openToast(new Notification("Hint was purchased!", "default", "check", false))
             }
         }
     }
