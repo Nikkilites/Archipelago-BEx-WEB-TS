@@ -46,29 +46,3 @@ function GridContent({ title, subtitle }: contentProps) {
     </div>
   )
 }
-
-
-/* 
-    *Might wanna move the recent locations bit to the logmundr journal
-            
-    <Title>Recent Locations Sent</Title>
-
-    {if (CurrentSessionEntry?.RecentLocationsSent.Count == 0)}
-    {
-        <h5>You have yet to send any locations this session.</h5>
-    }
-    else
-    {
-        <div className="recent-list">
-            {foreach (var notification in CurrentSessionEntry.RecentLocationsSent.TakeLast(5).Reverse())}
-            {
-                <div className="recent-item">
-                    <div className="recent-message">@notification.Message</div>
-                    <span className="recent-dot"
-                    style="background-color:{@notification.DotColor}">
-                    </span>
-                </div>
-            }
-        </div>
-    }
-*/
