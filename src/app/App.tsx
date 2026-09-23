@@ -62,7 +62,7 @@ type PageProps = {
 
 function ConnectedPage({ page, onPageChange }: PageProps) {
 
-  const [navDrawerActive, setNavDrawerActive] = useState(true)
+  const [navDrawerActive, setNavDrawerActive] = useState(false)
 
     function onPageChangeWNavDrawer(page: string) {
       onPageChange(page)
@@ -110,7 +110,7 @@ function Header({ theme }: HeaderProps) {
             {isActive && <span className="legacy:text-zinc-700 nordic:text-nordic-parchment-200 viking:text-viking-red-300">Welcome {playerName}, you are connected to Archipelago!</span>}
           </div>
 
-          {isActive && <div className="flex items-end"><Button onClick={disconnect}>Logout</Button></div>}
+          {isActive && <div className="flex items-end ml-2"><Button onClick={disconnect}>Logout</Button></div>}
         </header>
       </div>
       <div className="viking:border-b-2 viking:bg-viking-beige-200 viking:border-b-viking-beige-500 flex">
