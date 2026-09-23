@@ -196,12 +196,18 @@ export function SessionProvider({ children }: SessionProviderProps) {
         apService.sendLocation(loc.id)
         setCheckedLocIds(curr => [...curr, loc.id])
         openToast(new Notification(("You sent a " + loc.getScoutedItemString()), loc.getScoutedItemType(), "check", true))
+
+        // Check if treasure was also found
+        let reg = regions.find(reg => reg.name == loc.regionName)!
+        if (reg.getTreasureFoundNow(checkedLocIds, loc)) {
+            openToast(new Notification("Congratulations! You have found the " + reg.treasureName + "!", "highlighted", "check", false, "highlighted"), 12000)
+        }
     }
 
     function sendGoal() {
         console.log("Goal Sent!")
         apService.sendGoal()
-        openToast(new Notification("You have goaled!", "default", "check", false, "highlighted"))
+        openToast(new Notification("Congratulations! You have goaled!", "highlighted", "check", false, "highlighted"))
     }
     
     function sendHint() {        

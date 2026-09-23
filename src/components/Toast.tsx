@@ -10,9 +10,12 @@ export function Toast({ notif }: ToastProps) {
     const { copiedToast, onToastCopied } = useToast()
 
     return ( 
-        <div id="toast-success" className="inline-flex items-center max-w-xs min-w-xs md:max-w-sm md:min-w-sm p-2 pl-3 gap-2 border legacy:bg-legacy-blue-100 legacy:rounded-lg legacy:border-legacy-blue-200 legacy:text-zinc-800 viking:text-viking-red-400 viking:bg-viking-beige-200 viking:border-viking-beige-400" role="alert"> 
+        <div id="toast-success" className={twMerge(
+                                    "inline-flex items-center max-w-xs min-w-xs md:max-w-sm md:min-w-sm p-2 pl-3 gap-2 border legacy:bg-legacy-blue-100 legacy:rounded-lg legacy:border-legacy-blue-200 legacy:text-zinc-800 viking:text-viking-red-400 viking:bg-viking-beige-200 viking:border-viking-beige-400",
+                                    notif.notifStyle == "highlighted" && "legacy:bg-legacy-blue-200 legacy:border-legacy-blue-300 viking:text-viking-beige-200 viking:bg-viking-red-200 viking:border-viking-red-400",
+                                )} role="alert"> 
             <div className={twMerge(
-                    "inline-flex items-center justify-center shrink-0 w-6 h-6 rounded-2xl border legacy:border-zinc-800 viking:border-viking-red-400 ",
+                    "inline-flex items-center justify-center shrink-0 w-6 h-6 rounded-2xl border legacy:border-zinc-800 viking:border-viking-red-400 ",         
                     getDotColorStyles(notif.dotColor)
                 )}>
                 {notif.dotSymbol == "check" && 
@@ -56,7 +59,9 @@ function getDotColorStyles(dotColor: string) {
       return "bg-archi-trap "
     case "warning":
       return "viking:bg-viking-red-200 viking:text-viking-beige-200 legacy:text-legacy-red-400 legacy:bg-legacy-red-200 "
+    case "highlighted":
+      return "viking:bg-viking-beige-300 legacy:bg-legacy-blue-100 viking:text-viking-red-400 "
     default:
-      return "viking:bg-viking-beige-300 legacy:bg-legacy-blue-200 "
+      return "viking:bg-viking-beige-300 legacy:bg-legacy-blue-200 viking:text-viking-red-400 "
   }
 }

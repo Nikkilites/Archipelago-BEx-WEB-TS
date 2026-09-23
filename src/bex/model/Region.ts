@@ -31,4 +31,8 @@ export class Region {
   public getTreasureFound(checkedLocationIds: number[]) {
     return this.locations.filter(loc => !loc.getIsInList(checkedLocationIds) && loc.name.charAt(0) === 'S').length == 0
   }
+
+  public getTreasureFoundNow(checkedLocationIds: number[], loc: Location) {
+    return this.locations.filter(loc => !loc.getIsInList(checkedLocationIds) && loc.name.charAt(0) === 'S').length == 1 && loc.name.charAt(0) === 'S'
+  }
 }
