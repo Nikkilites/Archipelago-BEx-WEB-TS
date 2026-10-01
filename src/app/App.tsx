@@ -47,7 +47,7 @@ export default function App() {
           <div className='flex flex-1'>
             {!isActive ? <LoginForm /> : <ConnectedPage onPageChange={onPageChange} page={activePage} />}
           </div>
-          <Footer onThemeChange={onThemeChange}/>
+          <Footer theme={theme} onThemeChange={onThemeChange}/>
         </div>
       </div>
     </>
@@ -122,15 +122,21 @@ function Header({ theme }: HeaderProps) {
 
 type FooterProps = {
   onThemeChange: (theme:string) => void
+  theme:string
 }
 
-function Footer({ onThemeChange }: FooterProps) {
+function Footer({ onThemeChange, theme }: FooterProps) {
   return (
     <div className="flex flex-col text-sm text-center p-2 md:text-base md:pl-6 md:pr-6 md:p-3  legacy:bg-gray-100 legacy:border-t legacy:border-t-zinc-300 nordic:bg-nordic-grey-700 viking:bg-viking-red-300">
-      <footer className="grid grid-cols-3 viking:text-viking-beige-300">
+      <footer className="grid grid-cols-3 items-center viking:text-viking-beige-300">
         <ThemeSwitch onThemeChange={onThemeChange}/>
         <span className='mx-auto'>BEx Version 4.0</span>
-        <a className='flex justify-end underline' href="https://github.com/Nikkilites/Archipelago-BacklogExpedition-APWorld/blob/main/docs/en_Backlog%20Expedition.md" >BEx GitHub</a>
+        <a className='flex justify-end' href="https://github.com/Nikkilites/Archipelago-BacklogExpedition-APWorld/blob/main/docs/en_Backlog%20Expedition.md">
+          {theme === "viking" 
+            ? <img src="github-142-svgrepo-com-VikingBeige.svg" role="img" alt="Github" height="24" width="24"/> 
+            : <img src="github-142-svgrepo-com.svg" role="img" alt="Github" height="24" width="24"/>
+          }
+        </a>
       </footer>
     </div>
   )
