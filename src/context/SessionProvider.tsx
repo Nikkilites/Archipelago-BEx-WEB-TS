@@ -210,19 +210,18 @@ export function SessionProvider({ children }: SessionProviderProps) {
         openToast(new Notification("Congratulations! You have goaled!", "highlighted", "check", false, "highlighted"))
     }
     
-    function sendHint() {        
+    function sendHint() {  
+        console.log("Player is trying to hint")      
         const trashAvailable = trashAquired - trashSpent
 
         if (trashAvailable < trashCost) {
             openToast(new Notification("You do not have enough trash to pay for this hint!", "warning", "!", false))
-            console.log("Player didn't have enough available trash to hint")
         }
         else {
             const locIdsWithHint = hints.filter(hint => hint.item.sender.name == playerName).flatMap(hint => hint.item.locationId)
             const availableLocations = regions.flatMap(reg => reg.locations).filter(loc => !loc.getIsInList(checkedLocIds) && !loc.getIsInList(locIdsWithHint))
             if (availableLocations.length <= 0) {
                 openToast(new Notification("You have no unhinted locations to hint!", "warning", "!", false))
-                console.log("Player had no unhinted locations to hint")
             }
             else {
                 const rndLocation = availableLocations[Math.floor(Math.random() * availableLocations.length)];
