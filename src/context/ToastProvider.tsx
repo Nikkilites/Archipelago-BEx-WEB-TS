@@ -12,6 +12,8 @@ export function ToastProvider({ children }: ToastProviderProps) {
     const [copiedToast, setCopiedToast] = useState<string>("");
 
     const openToast = (notif: Notification, timeout: number | undefined = 6000) => {
+        console.log("Opened toast: " + notif.name)
+
         setToasts(curr => [...curr, notif])
         setTimeout(() => closeToast(notif.id), timeout)
     }
