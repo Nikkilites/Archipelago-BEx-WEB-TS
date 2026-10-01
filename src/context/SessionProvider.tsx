@@ -160,8 +160,8 @@ export function SessionProvider({ children }: SessionProviderProps) {
     function onReceiveHint(hint: Hint) {
         console.log("Hint received: " + hint.item.receiver.alias + "'s " + hint.item.name + " is at " + hint.item.locationName + " in " + hint.item.sender.alias + "'s world")
 
-        console.log(hint.item.receiver + "=" + apService.client.players.self + ": " + (hint.item.receiver == apService.client.players.self))
-        if (hint.item.receiver == apService.client.players.self) {
+        console.log(hint.item.receiver.name + "=" + apService.client.players.self.name + ": " + (hint.item.receiver.name == apService.client.players.self.name))
+        if (hint.item.receiver.name == apService.client.players.self.name) {
             openToast(new Notification("Your " + hint.item.name + " is at " + hint.item.locationName + " in " + hint.item.sender.alias + "'s world", "default", "!", true), 10000)
         }
         else {
