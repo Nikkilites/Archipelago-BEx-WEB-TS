@@ -38,6 +38,7 @@ export function SessionProvider({ children }: SessionProviderProps) {
     const [hints, setHints] = useState<Hint[]>([])
     
     let apService = useRef(new ArchipelagoService()).current;
+    let hasReceivedInitItems = useRef(false);
 
     //Create all controller functions here
     async function connectAndProcess(login: PlayerLogin) {
@@ -141,6 +142,7 @@ export function SessionProvider({ children }: SessionProviderProps) {
         setCheckedLocIds([])
         setTextClient([])
         setToasts([])
+        hasReceivedInitItems.current = false
     }
 
     function onReceiveItems(items: Item[]) {
@@ -149,11 +151,16 @@ export function SessionProvider({ children }: SessionProviderProps) {
 
             if (item.name.endsWith("Rune") && !item.name.startsWith("Broken")) {
                 setRunesAquired(curr => [...curr, item.name])
-                isActive && openToast(new Notification("You have received a " + item.name, "default", "!"), 10000)
+                console.log("Giving Rune: " + hasReceivedInitItems.current)
+                hasReceivedInitItems.current && openToast(new Notification("You have received a " + item.name, "default", "!"), 10000)
             }
             else {
                 setTrashAquired(curr => curr + 1)
             }
+        }
+
+        if (!hasReceivedInitItems.current) {
+            hasReceivedInitItems.current = true
         }
     }
 
