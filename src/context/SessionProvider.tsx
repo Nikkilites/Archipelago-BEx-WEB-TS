@@ -11,6 +11,7 @@ import { PlayerOptions } from "../bex/model/PlayerOptions";
 import { RegionData } from "../bex/data/RegionData";
 import { Notification } from "../bex/model/Notification";
 import type { PlayerLogin } from "../archipelago/PlayerLogin";
+import { getItemType } from "../bex/HelperFunctions";
 
 
 type SessionProviderProps = {
@@ -169,10 +170,10 @@ export function SessionProvider({ children }: SessionProviderProps) {
 
         console.log(hint.item.receiver.name + "=" + apService.client.players.self.name + ": " + (hint.item.receiver.name == apService.client.players.self.name))
         if (hint.item.receiver.name == apService.client.players.self.name) {
-            openToast(new Notification("Your " + hint.item.name + " is at " + hint.item.locationName + " in " + hint.item.sender.alias + "'s world", "default", "!", true), 10000)
+            openToast(new Notification("Your " + hint.item.name + " is at " + hint.item.locationName + " in " + hint.item.sender.alias + "'s world", getItemType(hint.item), "!", true), 10000)
         }
         else {
-            openToast(new Notification(hint.item.receiver.alias + "'s " + hint.item.name + " is at your " + hint.item.locationName, "default", "!"), 10000)
+            openToast(new Notification(hint.item.receiver.alias + "'s " + hint.item.name + " is at your " + hint.item.locationName, getItemType(hint.item), "!",), 10000)
         }
         setHints(curr => [...curr, hint])
     }

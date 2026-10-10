@@ -1,4 +1,5 @@
 import type { Item } from "archipelago.js";
+import { getItemType } from "../HelperFunctions";
 
 export class Location {
   name: string;
@@ -25,20 +26,6 @@ export class Location {
   }
 
   public getScoutedItemType(): string {
-    if (this.scoutedItem?.progression) {
-      return "progression" 
-    }
-    else if (this.scoutedItem?.useful) {
-      return "useful" 
-    }
-    else if (this.scoutedItem?.trap) {
-      return "trap" 
-    }
-    else if (this.scoutedItem?.filler) {
-      return "filler" 
-    }
-    else {
-      return "none" 
-    }
+    return getItemType(this.scoutedItem!)
   }
 }
