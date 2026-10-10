@@ -5,7 +5,7 @@ import type { PlayerOptions } from "../bex/model/PlayerOptions"
 import type { Location } from "../bex/model/Location"
 
 import type { ArchipelagoService } from "../archipelago/ArchipelagoService"
-import type { Hint } from "archipelago.js"
+import type { Hint } from "@airbreather/archipelago.js"
 import type { PlayerLogin } from "../archipelago/PlayerLogin"
 
 

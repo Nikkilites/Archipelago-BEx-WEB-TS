@@ -1,4 +1,4 @@
-import type { Item } from "archipelago.js";
+import type { Item } from "@airbreather/archipelago.js";
 import { getItemType } from "../HelperFunctions";
 
 export class Location {

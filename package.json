@@ -13,8 +13,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@airbreather/archipelago.js": "^2.2.1",
     "@tailwindcss/vite": "^4.3.3",
-    "archipelago.js": "^2.1.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "tailwind-merge": "^3.6.0",

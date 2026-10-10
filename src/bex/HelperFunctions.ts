@@ -1,4 +1,4 @@
-import type { Item } from "archipelago.js"
+import type { Item } from "@airbreather/archipelago.js"
 
 export function getItemType(item: Item): string {
     if (item.progression) {

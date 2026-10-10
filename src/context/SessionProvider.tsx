@@ -1,5 +1,5 @@
 import { useRef, useState, type ReactNode } from "react";
-import type { Item, Hint, JSONRecord } from "archipelago.js";
+import type { Item, Hint, JSONRecord } from "@airbreather/archipelago.js";
 
 import { useToast } from "./ToastContext";
 import { SessionContext } from "./SessionContext";
