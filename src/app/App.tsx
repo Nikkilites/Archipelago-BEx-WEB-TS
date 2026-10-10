@@ -113,7 +113,7 @@ function Header({ theme }: HeaderProps) {
           {isActive && <div className="flex items-end ml-2"><Button onClick={disconnect}>Logout</Button></div>}
         </header>
       </div>
-      <div className="viking:border-b-2 viking:bg-viking-beige-200 viking:border-b-viking-beige-500 flex">
+      <div className="viking:border-b-2 viking:bg-viking-beige-200 viking:border-b-viking-beige-500 flex scrollbar-none scrollbar-gutter-auto overflow-auto">
         {theme === "viking" && <span className=" viking:text-viking-beige-500 viking:font-norse viking:text-xs">LogmundrhasnoideahowlonghehasbeensailingHehasweatheredstormswavesseamonsterswhirpoolsThelastnightwasaviolentthunderstormwithflashesoflightningshowingshadowsoflandallaroundhimButthewindsjustwouldnotallowhimtopullintothesafetyofanyharborNowwiththedawningofthemorningsunourintrepidVikinghasnowwasheduponaforeignshoreGoldensandsscrapingthekeelofhisdragonboatandthewaternowgentlylappingathisfeetashehopsoutDespitethehardshipshehasenduredthereisonlyonethingonhismindCollectasmuchtreasureashecancramintothebottomofhisboatandraidthisentireplace</span>}
       </div>
     </div>
@@ -127,7 +127,7 @@ type FooterProps = {
 
 function Footer({ onThemeChange, theme }: FooterProps) {
   return (
-    <div className="flex flex-col text-sm text-center p-2 md:text-base md:pl-6 md:pr-6 md:p-3  legacy:bg-gray-100 legacy:border-t legacy:border-t-zinc-300 nordic:bg-nordic-grey-700 viking:bg-viking-red-300">
+    <div className="flex flex-col text-sm text-center p-2 md:text-base md:pl-6 md:pr-6 md:p-3 legacy:bg-gray-100 legacy:border-t legacy:border-t-zinc-300 nordic:bg-nordic-grey-700 viking:bg-viking-red-300">
       <footer className="grid grid-cols-3 items-center viking:text-viking-beige-300">
         <ThemeSwitch onThemeChange={onThemeChange}/>
         <span className='mx-auto'>BEx Version 4.0</span>

@@ -1,4 +1,4 @@
-import { Client, Hint, Item, type JSONSerializable } from "archipelago.js";
+import { Client, Hint, Item, type JSONSerializable } from "@airbreather/archipelago.js";
 import type { PlayerLogin } from "./PlayerLogin";
 
 export class ArchipelagoService {
